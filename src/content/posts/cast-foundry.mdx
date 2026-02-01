@@ -10,7 +10,7 @@ description: 'Understanding Cast with real-world examples.'
 Foundry is the most relevant and used frameworks nowadays to work with smart contracts
 in Solidity. Foundry provides a set of tools to facilitate the development, testing,
 and deployment of smart contracts. One of these tools is <b>Cast</b>.
-<br />
+
 Cast is a command-line tool that allows you to interact with Ethereum nodes and
 smart contracts. It provides a variety of commands to perform different tasks,
 such as sending transactions, querying contract state, making data conversions,
@@ -20,50 +20,74 @@ real-world scenarios.
 ## Cast examples
 
 <br />
+In this section, we will see some practical examples of how to use Cast for
+different purposes, such as number conversion, reading smart contract values and write smart contract values.
+
+<i>If you want to copy the commands, just click on the command box and it will be copied to your clipboard. </i>
+
+<br /><br />
 
 ### Number decimal - hexadecimal conversion
 
-<ConsoleCommandBlock>
-cast to-dec 0x000000000000000000000000000000000000000000000000000000000000002a
-</ConsoleCommandBlock>
+<br />
+One of the simplest use cases of Cast is to convert numbers between decimal and hexadecimal
+formats. Used especially when dealing with smart contract data.
 
 <ConsoleCommandBlock>
-cast to-hex 50
+  cast to-dec 0x000000000000000000000000000000000000000000000000000000000000002a
 </ConsoleCommandBlock>
 
-### Call to smart contract to read some value
+<ConsoleCommandBlock>cast to-hex 50</ConsoleCommandBlock>
 
+Those are just two simple examples, but Cast supports many other conversions, such as to-bool, to-address, to-bytes32, etc.
+
+### Call smart contracts to read values
+<br />
+One of the most common use cases of Cast is to call smart contract functions to read data from the blockchain. It permits easyly
+querying contract state without needing to write any code.
+
+The aspects that must be considered are:
+<ul>
+<li> <b>The contract address: </b> The address of the smart contract you want to interact with. </li>
+<li> <b>The function signature: </b> The signature of the function you want to call. </li>
+<li> <b>The network RPC URL: </b> The URL of the Ethereum node you want to connect to. You can include directly in the cast service, you can read from .env file or
+you can configure it in the foundry.toml file. </li>
+</ul>
 <ConsoleCommandBlock>
-cast call [contract_address] "number()" --rpc-url [network_rpc_url]
+  cast call [contract_address] "number()" --rpc-url [network_rpc_url]
 </ConsoleCommandBlock>
 
+In this second example, we are calling the allowance function of an ERC20 token contract to check the allowance
+that an address has given to another address. The main differece with the previous example is that this function
+requires two parameters: the owner address and the spender address. Furthermore, in this case we are passing the response type (uint256).
+ 
 <ConsoleCommandBlock>
 cast call [contract_address] "allowance(address, address)(uint256)" [param1] [param2] --rpc-url [network_rpc_url]
 </ConsoleCommandBlock>
 
-### Write to smart contract to update some value
+### Write smart contracts to update values
+<br />
+Another important use case of Cast is to send transactions to smart contracts to update their state. This allows you to interact with contracts and modify their data.
 
+When sending transactions, you need to consider:
+<ul>
+<li> <b>The private key: </b> The private key of the account you want to use to sign the transaction. </li>
+<li> <b>The contract address: </b> The address of the smart contract you want to interact with. </li>
+<li> <b>The function signature: </b> The signature of the function you want to call. </li>
+<li> <b>The network RPC URL: </b> The URL of the Ethereum node you want to connect to. You can include directly in the cast service, you can read from .env file or
+you can configure it in the foundry.toml file. </li>
+</ul>
+
+In this example, we are calling the mint function of an ERC20 token contract to mint new tokens to a specific address. The function requires two parameters: the recipient address and the amount of tokens to mint.
 <ConsoleCommandBlock>
-cast send --private-key $PRIVATE_KEY [contract_address] "mint(address, uint256)" [param1] [param2] --rpc-url $RPC_URL
+  cast send --private-key $PRIVATE_KEY [contract_address] "mint(address,uint256)" [param1] [param2] --rpc-url $RPC_URL
 </ConsoleCommandBlock>
 
+In this second example, we are using the cast parse-units command to convert a human-readable token amount (5 tokens) into its corresponding smallest unit (wei for Ether or the token's smallest denomination). This is particularly useful when dealing with ERC20 tokens that have decimals.
 <ConsoleCommandBlock>
-cast send --private-key $PRIVATE_KEY [contract_address] "mint(address, uint256)" [param1] $(cast parse-units 5) --rpc-url $RPC_URL
+  cast send --private-key $PRIVATE_KEY [contract_address] "mint(address,uint256)" [param1] $(cast parse-units 5) --rpc-url $RPC_URL
 </ConsoleCommandBlock>
 
-## Código Solidity
 
-<SolidityBlock title="Contrato Hola Mundo">
-{`pragma solidity ^0.8.0;
-
-contract HolaMundo {
-string public mensaje = "Hola Mundo";
-
-    function actualizar(string memory _nuevoMensaje) public {
-        mensaje = _nuevoMensaje;
-    }
-
-}
-`}
-
-</SolidityBlock>
+If you want to learn more about Cast and its capabilities, you can check the official documentation at
+<a href="https://getfoundry.sh/cast/overview" target="_blank" rel="noopener noreferrer">Cast official docs</a>

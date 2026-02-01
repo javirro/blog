@@ -33,7 +33,7 @@ export default async function PostPage({ params }: Params) {
         </svg>
         <time>{post.date}</time>
       </div>
-      <div className="prose prose-sm sm:prose-base lg:prose-lg max-w-none prose-headings:scroll-mt-20 prose-img:rounded-lg prose-pre:max-w-full prose-pre:overflow-x-auto">
+      <div className="prose prose-sm sm:prose-base lg:prose-xl max-w-none prose-headings:scroll-mt-20 prose-img:rounded-lg prose-pre:max-w-full prose-pre:overflow-x-auto">
         <MDXRemote
           source={post.content}
           components={{
