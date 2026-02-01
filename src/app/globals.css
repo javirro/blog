@@ -3,6 +3,31 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+
+  /* Color Palette - Complementing dark purple/blue gradient */
+  --primary: #6366f1; /* Indigo - main brand color */
+  --primary-dark: #4f46e5; /* Deeper indigo for hover states */
+  --secondary: #8b5cf6; /* Purple accent */
+  --accent: #a78bfa; /* Light purple for highlights */
+  --accent-bright: #c4b5fd; /* Very light purple */
+
+  /* Headings */
+  --heading-primary: #1e1b4b; /* Deep indigo for main titles */
+  --heading-secondary: #312e81; /* Medium indigo for subtitles */
+  --heading-tertiary: #4338ca; /* Lighter indigo for h3+ */
+
+  /* Text colors */
+  --text-primary: #1f2937; /* Dark gray for body */
+  --text-secondary: #6b7280; /* Medium gray for secondary text */
+  --text-muted: #9ca3af; /* Light gray for metadata */
+
+  /* Links */
+  --link-color: #6366f1;
+  --link-hover: #4f46e5;
+
+  /* Special accents */
+  --gold-accent: #fbbf24; /* Gold for special highlights */
+  --cyan-accent: #06b6d4; /* Cyan for alternative accents */
 }
 
 @theme inline {
@@ -17,13 +42,47 @@
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
+
+    /* Dark mode adjustments */
+    --heading-primary: #c4b5fd;
+    --heading-secondary: #a78bfa;
+    --heading-tertiary: #8b5cf6;
+
+    --text-primary: #e5e7eb;
+    --text-secondary: #d1d5db;
+    --text-muted: #9ca3af;
+
+    --link-color: #a78bfa;
+    --link-hover: #c4b5fd;
   }
 }
 
 body {
-  background: var(--background);
+  background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+  background-attachment: fixed;
+  min-height: 100vh;
   color: var(--foreground);
-  font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
+  font-family:
+    var(--font-inter),
+    system-ui,
+    -apple-system,
+    sans-serif;
+}
+
+/* Content container with subtle overlay for better readability */
+article,
+main > div {
+  background: rgba(255, 255, 255, 0.97);
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+@media (prefers-color-scheme: dark) {
+  article,
+  main > div {
+    background: rgba(17, 24, 39, 0.95);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  }
 }
 
 /* Blog typography optimization */
@@ -31,18 +90,80 @@ body {
   font-family: var(--font-merriweather), Georgia, serif;
   text-align: left;
   line-height: 1.75;
+  color: var(--text-primary);
 }
 
-.prose h1,
-.prose h2,
-.prose h3,
+.prose h1 {
+  font-family: var(--font-inter), system-ui, sans-serif;
+  font-weight: 900;
+  letter-spacing: -0.025em;
+  line-height: 1.2;
+  color: var(--heading-primary);
+  background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.prose h2 {
+  font-family: var(--font-inter), system-ui, sans-serif;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  line-height: 1.25;
+  color: var(--heading-secondary);
+}
+
+.prose h3 {
+  font-family: var(--font-inter), system-ui, sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.3;
+  color: var(--heading-tertiary);
+}
+
 .prose h4,
 .prose h5,
 .prose h6 {
   font-family: var(--font-inter), system-ui, sans-serif;
   font-weight: 700;
-  letter-spacing: -0.025em;
-  line-height: 1.25;
+  letter-spacing: -0.02em;
+  line-height: 1.3;
+  color: var(--heading-tertiary);
+}
+
+.prose a {
+  color: var(--link-color);
+  text-decoration: none;
+  font-weight: 500;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.prose a:hover {
+  color: var(--link-hover);
+  border-bottom-color: var(--link-hover);
+}
+
+.prose strong {
+  color: var(--heading-tertiary);
+  font-weight: 700;
+}
+
+.prose em {
+  color: var(--text-primary);
+}
+
+.prose blockquote {
+  border-left: 4px solid var(--primary);
+  background: linear-gradient(
+    90deg,
+    rgba(99, 102, 241, 0.05) 0%,
+    transparent 100%
+  );
+  color: var(--text-secondary);
+  font-style: italic;
+  padding: 1rem 1.5rem;
+  margin: 1.5rem 0;
 }
 
 .prose p {
@@ -51,12 +172,36 @@ body {
   hyphens: auto;
   -webkit-hyphens: auto;
   -moz-hyphens: auto;
+  color: var(--text-primary);
 }
 
 .prose code {
   font-family: var(--font-geist-mono), monospace;
+  background: rgba(99, 102, 241, 0.1);
+  color: var(--primary-dark);
+  padding: 0.2em 0.4em;
+  border-radius: 4px;
+  font-size: 0.9em;
 }
 
 .prose pre {
   text-align: left;
+  background: rgba(15, 12, 41, 0.95) !important;
+  border: 1px solid rgba(99, 102, 241, 0.3);
+  border-radius: 8px;
+}
+
+.prose pre code {
+  background: transparent;
+  color: var(--accent-bright);
+  padding: 0;
+}
+
+.prose ul,
+.prose ol {
+  color: var(--text-primary);
+}
+
+.prose li::marker {
+  color: var(--primary);
 }

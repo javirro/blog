@@ -19,22 +19,37 @@ real-world scenarios.
 
 ## Cast examples
 
-### Number conversion
+<br />
 
-<ConsoleCommandBlock title="Convertir número decimal a hexadecimal">
-  cast to-dec 0x000000000000000000000000000000000000000000000000000000000000002a
+### Number decimal - hexadecimal conversion
 
-  Output: 42
+<ConsoleCommandBlock>
+cast to-dec 0x000000000000000000000000000000000000000000000000000000000000002a
 </ConsoleCommandBlock>
 
-
-
-<ConsoleCommandBlock title="Convertir número decimal a hexadecimal">
-    cast to-hex 50
-    Output: 0x32
+<ConsoleCommandBlock>
+cast to-hex 50
 </ConsoleCommandBlock>
 
+### Call to smart contract to read some value
 
+<ConsoleCommandBlock>
+cast call [contract_address] "number()" --rpc-url [network_rpc_url]
+</ConsoleCommandBlock>
+
+<ConsoleCommandBlock>
+cast call [contract_address] "allowance(address, address)(uint256)" [param1] [param2] --rpc-url [network_rpc_url]
+</ConsoleCommandBlock>
+
+### Write to smart contract to update some value
+
+<ConsoleCommandBlock>
+cast send --private-key $PRIVATE_KEY [contract_address] "mint(address, uint256)" [param1] [param2] --rpc-url $RPC_URL
+</ConsoleCommandBlock>
+
+<ConsoleCommandBlock>
+cast send --private-key $PRIVATE_KEY [contract_address] "mint(address, uint256)" [param1] $(cast parse-units 5) --rpc-url $RPC_URL
+</ConsoleCommandBlock>
 
 ## Código Solidity
 

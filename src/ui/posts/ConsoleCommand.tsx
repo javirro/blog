@@ -9,8 +9,8 @@ export const ConsoleCommandBlock = ({ children }: ConsoleCommandProps) => (
     style={{
       borderLeft: '4px solid #6366f1',
       background: '#1e1b4b',
-      borderRadius: '0 8px 8px 0',
-      padding: '16px 20px',
+      borderRadius: '8px',
+      padding: '16px',
       marginBlock: '24px',
       position: 'relative',
       maxWidth: '100%',
