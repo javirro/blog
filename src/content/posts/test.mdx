@@ -1,0 +1,54 @@
+---
+title: 'Foundry tools: Cast'
+date: '2026-02-01'
+description: 'Understanding Cast with real-world examples.'
+---
+
+# Foundry tools: Cast
+
+<br />
+Foundry is the most relevant and used frameworks nowadays to work with smart contracts
+in Solidity. Foundry provides a set of tools to facilitate the development, testing,
+and deployment of smart contracts. One of these tools is <b>Cast</b>.
+<br />
+Cast is a command-line tool that allows you to interact with Ethereum nodes and
+smart contracts. It provides a variety of commands to perform different tasks,
+such as sending transactions, querying contract state, making data conversions,
+and more. In this post, we will explore some examples of how to use Cast in
+real-world scenarios.
+
+## Cast examples
+
+### Number conversion
+
+<ConsoleCommandBlock title="Convertir número decimal a hexadecimal">
+  cast to-dec 0x000000000000000000000000000000000000000000000000000000000000002a
+
+  Output: 42
+</ConsoleCommandBlock>
+
+
+
+<ConsoleCommandBlock title="Convertir número decimal a hexadecimal">
+    cast to-hex 50
+    Output: 0x32
+</ConsoleCommandBlock>
+
+
+
+## Código Solidity
+
+<SolidityBlock title="Contrato Hola Mundo">
+{`pragma solidity ^0.8.0;
+
+contract HolaMundo {
+string public mensaje = "Hola Mundo";
+
+    function actualizar(string memory _nuevoMensaje) public {
+        mensaje = _nuevoMensaje;
+    }
+
+}
+`}
+
+</SolidityBlock>
