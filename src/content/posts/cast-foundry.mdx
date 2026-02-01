@@ -21,7 +21,7 @@ real-world scenarios.
 
 <br />
 In this section, we will see some practical examples of how to use Cast for
-different purposes, such as number conversion, reading smart contract values and write smart contract values.
+different purposes, such as number conversion, reading smart contract values, writing smart contract values and handle private keys.
 
 <i>If you want to copy the commands, just click on the command box and it will be copied to your clipboard. </i>
 
@@ -88,6 +88,34 @@ In this second example, we are using the cast parse-units command to convert a h
   cast send --private-key $PRIVATE_KEY [contract_address] "mint(address,uint256)" [param1] $(cast parse-units 5) --rpc-url $RPC_URL
 </ConsoleCommandBlock>
 
+### Handle private keys and addresses
+<br />
+Cast also provides commands to handle  private keys securely. To understand the importance of this, we must understand that in production
+environments, private keys should never be hardcoded, exposed in the code or even included in a .env file.
+Instead, they should be managed securely using the keystore.
 
+The keystore is a secure storage mechanism that encrypts private keys and protects them with a password. To store a private key in the keystore, you can use the following command:
+ <ConsoleCommandBlock>
+cast wallet import [key_name] --interactive
+</ConsoleCommandBlock>
+
+This command will prompt a interactve input in your terminal and you must to paste there the private key you want to store.
+
+To see the list of private keys you have stored there, use:
+
+<ConsoleCommandBlock>
+cast wallet list
+</ConsoleCommandBlock>
+
+To use a private key stored in the keystore, for running a script you can use:
+
+<ConsoleCommandBlock>
+forge script script/general/DeploySimpleTest.s.sol --fork-url [rpc_url] --account [key_name] --sender [address_corresponding_to_pk] --broadcast
+</ConsoleCommandBlock>
+
+This command will use the private key associated with the specified key name to sign the transactions.
+
+### Extra resources
+<br />
 If you want to learn more about Cast and its capabilities, you can check the official documentation at
 <a href="https://getfoundry.sh/cast/overview" target="_blank" rel="noopener noreferrer">Cast official docs</a>

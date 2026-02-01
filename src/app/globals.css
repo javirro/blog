@@ -67,6 +67,7 @@ body {
     system-ui,
     -apple-system,
     sans-serif;
+    padding-bottom: 1rem;
 }
 
 /* Content container with subtle overlay for better readability */
