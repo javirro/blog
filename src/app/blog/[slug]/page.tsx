@@ -9,11 +9,11 @@ interface Params {
     slug: string
   }>
 }
-
+// Applying Static site generation (SSG) for blog postst because their content doesn't change often
 export async function generateStaticParams() {
   const posts = getAllPosts()
   return posts.map((post) => ({
-    slug: post.slug,
+    slug: post.slug
   }))
 }
 export async function generateMetadata({ params }: Params) {
@@ -22,7 +22,7 @@ export async function generateMetadata({ params }: Params) {
   return {
     title: post?.title,
     description: post?.description,
-    canonical: `https://yourdomain.com/posts/${slug}`,
+    canonical: `https://yourdomain.com/posts/${slug}`
   }
 }
 
@@ -34,17 +34,32 @@ export default async function PostPage({ params }: Params) {
     notFound()
   }
 
+  // Structured Data (JSON-LD) for SEO. It must be rendered inside the article page in Server side components.
+  const schemaArticle = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: post.title,
+    description: post.description,
+    datePublished: post.date,
+    dateModified: post.updated,
+    author: {
+      '@type': 'Person',
+      name: post.author
+    },
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': `https://tudominio.com/blog/${slug}`
+    }
+  }
+
   return (
     <article className="w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-12">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaArticle) }} />
       <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black mb-2 sm:mb-3 wrap-break-words bg-linear-to-r from-indigo-500 to-purple-500 bg-clip-text text-transparent">
         {post.title}
       </h1>
       <div className="flex items-center gap-2 text-sm sm:text-base text-gray-500 mb-6 sm:mb-8">
-        <svg
-          className="w-4 h-4 sm:w-5 sm:h-5"
-          fill="currentColor"
-          viewBox="0 0 20 20"
-        >
+        <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor" viewBox="0 0 20 20">
           <path
             fillRule="evenodd"
             d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
@@ -58,7 +73,7 @@ export default async function PostPage({ params }: Params) {
           source={post.content}
           components={{
             SolidityBlock,
-            ConsoleCommandBlock,
+            ConsoleCommandBlock
           }}
         />
       </div>
