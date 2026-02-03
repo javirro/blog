@@ -37,9 +37,14 @@ export default function RootLayout({
         <link rel="icon" href="/favicon.png" />
       </head>
       <body
-        className={`${inter.variable} ${merriweather.variable} ${geistMono.variable} antialiased`}
+        className={`${inter.variable} ${merriweather.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen`}
       >
-        {children}
+        <main className="flex-grow">{children}</main>
+        <footer className="border-t border-gray-200 dark:border-gray-800 mt-16">
+          <div className="max-w-4xl mx-auto px-6 py-8 text-center text-sm text-gray-600 dark:text-gray-400">
+            © {new Date().getFullYear()} Blockchain Blog. All rights reserved.
+          </div>
+        </footer>
       </body>
     </html>
   )

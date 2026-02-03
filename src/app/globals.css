@@ -48,7 +48,7 @@
     --heading-secondary: #a78bfa;
     --heading-tertiary: #8b5cf6;
 
-    --text-primary: #e5e7eb;
+    --text-primary: #cecece;
     --text-secondary: #d1d5db;
     --text-muted: #9ca3af;
 
@@ -67,20 +67,28 @@ body {
     system-ui,
     -apple-system,
     sans-serif;
-    padding-bottom: 1rem;
 }
 
 /* Content container with subtle overlay for better readability */
-article,
-main > div {
+article {
+  background: rgba(255, 255, 255, 0.97);
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.blog-container {
   background: rgba(255, 255, 255, 0.97);
   border-radius: 12px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
 }
 
 @media (prefers-color-scheme: dark) {
-  article,
-  main > div {
+  article {
+    background: rgba(17, 24, 39, 0.95);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  }
+  
+  .blog-container {
     background: rgba(17, 24, 39, 0.95);
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
   }
@@ -150,6 +158,11 @@ main > div {
 
 .prose strong {
   color: var(--heading-tertiary);
+  font-weight: 700;
+}
+
+.prose b {
+  color: white;
   font-weight: 700;
 }
 

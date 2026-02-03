@@ -1,0 +1,64 @@
+---
+title: 'Foundry tools: Anvil'
+description: 'Understanding how to run blockchain EVM node with Anvil.'
+date: '2026-02-01'
+updated: '2026-02-01'
+author: 'Javier Rodriguez'
+tags: ['foundry', 'anvil', 'smart contracts',  'ethereum', 'web3']
+
+---
+
+# Foundry tools: Anvil
+<br />
+Foundry is a key tool to work with smart contracts in Solidity and blockchain networks. Foundry provides a set of tools to facilitate the development, testing,
+and deployment of smart contracts. One of these tools is <b>Anvil</b>.
+
+Anvil is a local Ethereum node that runs on your machine. It is designed to be fast and lightweight. It allows developers to test and debug their smart contracts
+locally without needing to connect to a remote Ethereum network. Anvil provides a set of features that make it easy to work with smart contracts, such as instant mining,
+automatic account creation, and support for multiple networks.
+In this post, we will explore some examples of how to use Anvil in real-world scenarios.
+
+## Anvil examples
+
+<br />
+In this section, we will see some practical examples of how to use Anvil in different scenarios.
+
+<i>If you want to copy the commands, just click on the command box and it will be copied to your clipboard. </i>
+
+<br /><br />
+
+### Basic initialization
+
+<br />
+The simpliest scenario is to run Anvil with the default configuration. This will start a local Ethereum node on your machine with default settings.
+You can do this by running the following command in your terminal:
+<ConsoleCommandBlock>
+anvil
+</ConsoleCommandBlock>
+
+This command will create a local Ethereum node that listens on <b>http://127.0.0.1:8545</b> and it will create accounts with pre-funded Ether for testing purposes. The chainId will be <b>31337</b> by default.
+
+You can use this network to deploy and test your smart contracts locally, to connect your dApps, or to run scripts that interact with the blockchain.
+
+### Forking real networks
+<br />
+One of the most common use cases of Anvil is to fork real blockchain networks. This allows you to create a local copy of the state of a real network, such as Mainnet, Goerli, or Sepolia.
+
+In the following example, we will fork the Ethereum Mainnet using an RPC URL from a public provider. You can replace the URL with your own provider if you have one.
+
+<ConsoleCommandBlock>
+  anvil --fork-url https://ethereum.reth.rs/rpc
+</ConsoleCommandBlock>
+
+This strategy is very useful for testing smart contracts in a realistic environment, as you can interact with real contracts and data without risking real funds.
+One of the most common use cases is to test DeFi protocols, as you can simulate trades, liquidity provision, and other interactions with real assets.
+In general, you can test any smart contract which has been already deployed on the network you are forking.
+
+
+Anvil offers additional options for forking, such as specifying a block number to fork from, configuring some network parameters for the new RPC endpoint which you are creating like CORS, request limits, response headers and much more.
+All these options are essential to customize the behavior of your local node and to adapt it to your specific needs. You can totally simulate the behavior of a real network with Anvil.
+
+### Extra resources
+<br />
+If you want to learn more about Anvil and all the scenarios it supports, you can check the official documentation at
+<a href="https://getfoundry.sh/anvil/reference/anvil" target="_blank" rel="noopener noreferrer">Anvil official docs</a>

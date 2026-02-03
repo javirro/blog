@@ -22,10 +22,10 @@ export default function Home() {
           </div>
 
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black leading-tight tracking-tight bg-linear-to-r from-indigo-500 via-purple-500 to-indigo-600 bg-clip-text text-transparent">
-            Welcome to Blockchain Blog
+            Welcome to Blockchain by devs for devs
           </h1>
 
-          <p className="text-lg sm:text-xl leading-8 text-gray-700 max-w-2xl">
+          <p className="text-lg sm:text-xl leading-8 text-gray-400 max-w-2xl">
             Explore the latest insights, tutorials, and deep dives into
             blockchain technology, smart contracts, and decentralized
             applications.
@@ -50,26 +50,6 @@ export default function Home() {
                 />
               </svg>
               Read Articles
-            </Link>
-
-            <Link
-              href="/blog"
-              className="flex h-12 items-center justify-center gap-2 rounded-lg border-2 border-indigo-500 px-8 text-indigo-600 font-semibold transition-all duration-300 hover:bg-indigo-50 hover:border-indigo-600"
-            >
-              <svg
-                className="w-5 h-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M13 10V3L4 14h7v7l9-11h-7z"
-                />
-              </svg>
-              Get Started
             </Link>
           </div>
 
