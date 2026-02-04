@@ -33,7 +33,7 @@ export default function Home() {
 
           <div className="flex flex-col sm:flex-row gap-4 mt-4 w-full sm:w-auto">
             <Link
-              href="/blog"
+              href="/posts"
               className="flex h-12 items-center justify-center gap-2 rounded-lg bg-linear-to-r from-indigo-500 to-purple-600 px-8 text-white font-semibold transition-all duration-300 hover:shadow-xl hover:scale-105"
             >
               <svg
