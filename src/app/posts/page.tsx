@@ -12,7 +12,7 @@ export default function BlogPage() {
       <div className="space-y-8">
         {posts.map((post) => (
           <Link
-            href={`/blog/${post.slug}`}
+            href={`/posts/${post.slug}`}
             className=" block border-b pb-8 border-gray-200 hover:border-indigo-500 transition-all duration-300 group"
             key={post.slug}
           >

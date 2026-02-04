@@ -4,6 +4,7 @@ import { getAllPosts, getPostBySlug } from '@/lib/posts'
 import { MDXRemote } from 'next-mdx-remote/rsc'
 import { SolidityBlock } from '@/ui/posts/SolidityBlock'
 import { ConsoleCommandBlock } from '@/ui/posts/ConsoleCommand'
+import { AnvilComparisonTable } from '@/ui/posts/AnvilComparisonTable'
 
 interface Params {
   params: Promise<{
@@ -23,7 +24,7 @@ export async function generateMetadata({ params }: Params) {
   return {
     title: post?.title,
     description: post?.description,
-    canonical: `https://yourdomain.com/posts/${slug}`
+    canonical: `https://blog.techsmachine.com/posts/${slug}`
   }
 }
 
@@ -49,14 +50,14 @@ export default async function PostPage({ params }: Params) {
     },
     mainEntityOfPage: {
       '@type': 'WebPage',
-      '@id': `https://tudominio.com/blog/${slug}`
+      '@id': `https://blog.techsmachine.com/posts/${slug}`
     }
   }
 
   return (
     <article className="w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-12">
       <Link
-        href="/blog"
+        href="/posts"
         className="inline-flex items-center gap-2 text-sm sm:text-base text-indigo-400 hover:text-indigo-300 transition-colors mb-6 sm:mb-8 group"
       >
         <svg
@@ -88,12 +89,13 @@ export default async function PostPage({ params }: Params) {
         </svg>
         <time>{post.date}</time>
       </div>
-      <div className="prose prose-sm sm:prose-base lg:prose-xl max-w-none prose-headings:scroll-mt-20 prose-img:rounded-lg prose-pre:max-w-full prose-pre:overflow-x-auto">
+      <div className="prose prose-sm sm:prose-base lg:prose-xl max-w-none prose-headings:scroll-mt-20 prose-img:rounded-lg prose-pre:max-w-full prose-pre:overflow-x-auto px-4">
         <MDXRemote
           source={post.content}
           components={{
             SolidityBlock,
-            ConsoleCommandBlock
+            ConsoleCommandBlock,
+            AnvilComparisonTable
           }}
         />
       </div>

@@ -8,10 +8,17 @@ tags: ['foundry', 'anvil', 'smart contracts',  'ethereum', 'web3']
 
 ---
 
-# Foundry tools: Anvil
 <br />
+<i>
+**TL;DR**: Anvil is Foundry's local Ethereum node for testing smart contracts. It provides instant mining, pre-funded test accounts, and network forking capabilities.
+Default runs on http://127.0.0.1:8545 with chainId 31337. Supports forking mainnet and testnets for realistic testing environments.
+</i>
+
+<br /><br />
 Foundry is a key tool to work with smart contracts in Solidity and blockchain networks. Foundry provides a set of tools to facilitate the development, testing,
 and deployment of smart contracts. One of these tools is <b>Anvil</b>.
+
+
 
 Anvil is a local Ethereum node that runs on your machine. It is designed to be fast and lightweight. It allows developers to test and debug their smart contracts
 locally without needing to connect to a remote Ethereum network. Anvil provides a set of features that make it easy to work with smart contracts, such as instant mining,
@@ -36,9 +43,18 @@ You can do this by running the following command in your terminal:
 anvil
 </ConsoleCommandBlock>
 
-This command will create a local Ethereum node that listens on <b>http://127.0.0.1:8545</b> and it will create accounts with pre-funded Ether for testing purposes. The chainId will be <b>31337</b> by default.
+This command will create a local Ethereum node that listens on <b>http://127.0.0.1:8545</b> and it will create accounts with pre-funded Ether for testing purposes. 
+The chainId will be <b>31337</b> by default. Specifically, here are the main default parameters:
 
-You can use this network to deploy and test your smart contracts locally, to connect your dApps, or to run scripts that interact with the blockchain.
+**Default Configuration:**
+- RPC endpoint: http://127.0.0.1:8545
+- ChainId: 31337
+- Accounts created: 10 pre-funded accounts
+- Initial balance per account: 10,000 ETH
+- Block time: Instant mining (0 seconds)
+- Gas limit: 30,000,000
+
+These defaults are ideal for rapid development and testing without waiting for block confirmations. You can use this network to deploy and test your smart contracts locally, to connect your dApps, or to run scripts that interact with the blockchain. 
 
 ### Forking real networks
 <br />
@@ -58,7 +74,35 @@ In general, you can test any smart contract which has been already deployed on t
 Anvil offers additional options for forking, such as specifying a block number to fork from, configuring some network parameters for the new RPC endpoint which you are creating like CORS, request limits, response headers and much more.
 All these options are essential to customize the behavior of your local node and to adapt it to your specific needs. You can totally simulate the behavior of a real network with Anvil.
 
-### Extra resources
+
+## Similar alternatives to Anvil
+<br />
+
+There are other similar alternatives to Anvil that you can use for local Ethereum development. Some of the most popular ones are compared below:
+
+
+<AnvilComparisonTable />
+
+## Frequently Asked Questions
+<br />
+
+### What is Anvil used for?
+Anvil is a local Ethereum node from the Foundry toolkit used for testing and debugging Solidity smart contracts locally without connecting to remote networks.
+
+### What port does Anvil run on by default?
+Anvil runs on http://127.0.0.1:8545 by default with chainId 31337.
+
+### How do I fork Ethereum mainnet with Anvil?
+Use the command `anvil --fork-url https://ethereum.reth.rs/rpc` to create a local copy of mainnet state.
+
+### Does Anvil support multiple networks?
+Yes, Anvil can fork any EVM-compatible network including Ethereum mainnet, Sepolia, Goerli, Polygon, Arbitrum, and others by providing the appropriate RPC URL.
+
+### What are the default accounts created by Anvil?
+Anvil creates 10 test accounts, each pre-funded with 10,000 ETH for testing purposes.
+
+
+## Extra resources
 <br />
 If you want to learn more about Anvil and all the scenarios it supports, you can check the official documentation at
 <a href="https://getfoundry.sh/anvil/reference/anvil" target="_blank" rel="noopener noreferrer">Anvil official docs</a>

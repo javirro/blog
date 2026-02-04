@@ -10,6 +10,6 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ['/api', '/_next']
       }
     ],
-    sitemap: 'https://tudominio.com/sitemap.xml'
+    sitemap: 'https://blog.techsmachine.com/sitemap.xml'
   }
 }
