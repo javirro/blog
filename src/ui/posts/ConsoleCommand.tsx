@@ -4,46 +4,63 @@ import { useState } from 'react'
 
 interface ConsoleCommandProps {
   children: React.ReactNode
-  title?: string
 }
+
 export const ConsoleCommandBlock = ({ children }: ConsoleCommandProps) => {
   const [copied, setCopied] = useState(false)
 
   const handleCopy = () => {
-    const data = (children as { props: { children: string } })?.props?.children
-    navigator.clipboard.writeText(data as string)
-    setCopied(true)
-    setTimeout(() => setCopied(false), 2000)
+    // Extraer texto de forma más robusta
+    const textToCopy = typeof children === 'string' ? children : document.getElementById('command-text')?.innerText
+    if (textToCopy) {
+      navigator.clipboard.writeText(textToCopy as string)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    }
   }
 
   return (
     <div
+      role="button"
+      aria-label="Copy command to clipboard"
       style={{
         borderLeft: '4px solid #6366f1',
-        background: '#1e1b4b',
+        background: '#1b1b3a',
         borderRadius: '8px',
         padding: '16px',
         marginBlock: '24px',
         position: 'relative',
-        maxWidth: '100%',
-        overflowX: 'auto',
-        cursor: 'pointer',
+        cursor: 'pointer'
       }}
-      className='hover:brightness-190'
+      className="hover:brightness-125 transition-all"
       onClick={handleCopy}
     >
-      <pre
-        style={{
-          margin: 0,
-          color: '#c4b5fd',
-          whiteSpace: 'pre',
-          overflowX: 'auto',
-        }}
-      >
-        <code
-          style={{ display: 'block', paddingTop: '12px', paddingLeft: '6px', paddingRight: '6px' }}
+      {/* This avoid moving the layout when showing the copied indicator */}
+      {copied && (
+        <span
+          style={{
+            position: 'absolute',
+            top: '8px',
+            right: '12px',
+            fontSize: '12px',
+            color: '#10b981',
+            fontWeight: 'bold'
+          }}
         >
-          {copied ? 'Copied!' : children}
+          ✓ Copied!
+        </span>
+      )}
+
+      <pre style={{ margin: 0, overflowX: 'auto' }}>
+        <code
+          id="command-text"
+          style={{
+            color: '#c4b5fd',
+            display: 'block',
+            fontFamily: 'monospace'
+          }}
+        >
+          {children}
         </code>
       </pre>
     </div>

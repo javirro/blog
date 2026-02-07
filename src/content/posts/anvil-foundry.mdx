@@ -1,21 +1,21 @@
 ---
-title: 'Foundry tools: Anvil'
+title: 'Anvil Foundry Guide: High-Performance Local Ethereum Node for Testing'
 description: 'Understanding how to run blockchain EVM node with Anvil.'
 date: '2026-02-01'
-updated: '2026-02-01'
+updated: '2026-02-05'
 author: 'Javier Rodriguez'
-tags: ['foundry', 'anvil', 'smart contracts',  'ethereum', 'web3']
+tags: ['foundry', 'anvil', 'smart contracts',  'ethereum', 'web3', 'EVM']
 
 ---
 
 <br />
 <i>
-**TL;DR**: Anvil is Foundry's local Ethereum node for testing smart contracts. It provides instant mining, pre-funded test accounts, and network forking capabilities.
-Default runs on http://127.0.0.1:8545 with chainId 31337. Supports forking mainnet and testnets for realistic testing environments.
+**TL;DR**: Anvil is a local Ethereum node (EVM) designed for development and testing. It allows you to run a local blockchain with 10 pre-funded accounts (10,000 ETH each),
+supports Mainnet forking to simulate real-world environments, and offers instant mining for rapid smart contract debugging.
 </i>
 
 <br /><br />
-Foundry is a key tool to work with smart contracts in Solidity and blockchain networks. Foundry provides a set of tools to facilitate the development, testing,
+Foundry is a key tool to work with smart contracts in Solidity and EVM networks. Foundry provides a set of tools to facilitate the development, testing,
 and deployment of smart contracts. One of these tools is <b>Anvil</b>.
 
 
@@ -106,3 +106,6 @@ Anvil creates 10 test accounts, each pre-funded with 10,000 ETH for testing purp
 <br />
 If you want to learn more about Anvil and all the scenarios it supports, you can check the official documentation at
 <a href="https://getfoundry.sh/anvil/reference/anvil" target="_blank" rel="noopener noreferrer">Anvil official docs</a>
+
+Furthermore, if you want to learn more about another Foundry tools, you can check the <RedirectOwnPost route="/posts/cast-foundry" text="Foundry Cast tutorial for smart contract interaction" />,
+where we explain how to use Cast, the command-line tool from Foundry to interact with Ethereum nodes and smart contracts.

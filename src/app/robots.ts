@@ -1,3 +1,4 @@
+import { BASE_URL } from '@/constants'
 import { MetadataRoute } from 'next'
 
 //TODO: Update the URL to match your domain
@@ -10,6 +11,6 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ['/api', '/_next']
       }
     ],
-    sitemap: 'https://blog.techsmachine.com/sitemap.xml'
+    sitemap: `${BASE_URL}/sitemap.xml`
   }
 }

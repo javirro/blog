@@ -5,6 +5,7 @@ import { MDXRemote } from 'next-mdx-remote/rsc'
 import { SolidityBlock } from '@/ui/posts/SolidityBlock'
 import { ConsoleCommandBlock } from '@/ui/posts/ConsoleCommand'
 import { AnvilComparisonTable } from '@/ui/posts/AnvilComparisonTable'
+import RedirectOwnPost from '@/ui/posts/RedirectOwnPost'
 
 interface Params {
   params: Promise<{
@@ -95,7 +96,8 @@ export default async function PostPage({ params }: Params) {
           components={{
             SolidityBlock,
             ConsoleCommandBlock,
-            AnvilComparisonTable
+            AnvilComparisonTable,
+            RedirectOwnPost
           }}
         />
       </div>

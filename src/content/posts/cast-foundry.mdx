@@ -1,28 +1,28 @@
 ---
-title: 'Foundry tools: Cast'
+title: 'Foundry Cast Tutorial: Interacting with Smart Contracts via CLI'
 description: 'Understanding Cast with real-world examples.'
 date: '2026-02-01'
-updated: '2026-02-01'
+updated: '2026-02-05'
 author: 'Javier Rodriguez'
-tags: ['foundry', 'cast', 'smart contracts', 'solidity', 'ethereum']
+tags: ['foundry', 'cast', 'blockchain', 'smart contracts', 'solidity', 'ethereum', 'EVM']
 
 ---
 
 <i>
-**TL;DR**: Cast is Foundry's command-line tool for interacting with Ethereum smart contracts and nodes. Key features include: number format conversions (decimal/hex), reading contract state with `cast call`, writing transactions with `cast send`, and secure private key management via encrypted keystore. Supports RPC configuration through CLI flags, environment variables, or foundry.toml.
+**TL;DR**: Cast is the Foundry CLI tool used to interact with Ethereum smart contracts and EVM blockchain nodes. Key features include: number format conversions (decimal/hex), reading contract state with `cast call`, writing transactions with `cast send`, and secure private key management via encrypted keystore. Supports RPC configuration through CLI flags, environment variables, or foundry.toml.
 </i>
 
 
 <br />
 Foundry is the most relevant and used frameworks nowadays to work with smart contracts
-in Solidity. Foundry provides a set of tools to facilitate the development, testing,
+in Solidity and EVM networks. Foundry provides a set of tools to facilitate the development, testing,
 and deployment of smart contracts. One of these tools is <b>Cast</b>.
 
 Cast is a command-line tool that allows you to interact with Ethereum nodes and
 smart contracts. It provides a variety of commands to perform different tasks,
 such as sending transactions, querying contract state, making data conversions,
 and more. In this post, we will explore some examples of how to use Cast in
-real-world scenarios.
+real-world scenarios working with EVM networks.
 
 ## Cast examples
 
@@ -159,3 +159,6 @@ For `cast call` (read operations), specifying return types like `(uint256)` help
 <br />
 If you want to learn more about Cast and its capabilities, you can check the official documentation at
 <a href="https://getfoundry.sh/cast/overview" target="_blank" rel="noopener noreferrer">Cast official docs</a>
+
+Furthermore, if you want to learn more about another Foundry tools, you can check the <RedirectOwnPost route="/posts/anvil-foundry" text="Foundry Anvil tutorial for local Ethereum node" />,
+where we explain how to use Anvil, the local Ethereum node from Foundry for testing and development.
