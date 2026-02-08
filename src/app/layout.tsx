@@ -25,6 +25,24 @@ export const metadata: Metadata = {
   title: 'Blockchain Blog',
   description:
     'Learn the most recent technologies for Blockchain, Solidity and Web3 development',
+    openGraph: {
+    type: 'website',
+    locale: 'en_US',
+    url: 'https://blog.techsmachine.com',
+    siteName: 'techsmachine',
+    images: [
+      {
+        url: '/og-global.png', //internal path to the image in the public folder
+        width: 1200,
+        height: 630,
+        alt: 'techsmachine - Blockchain & Smart Contracts Blog',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    images: ['/og-global.png'],
+  },
 }
 
 export default function RootLayout({
