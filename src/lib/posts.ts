@@ -39,3 +39,11 @@ export function getPostBySlug(slug: string): Post | undefined {
   const posts = getAllPosts();
   return posts.find((post) => post.slug === slug);
 }
+
+export function getLastUpdatedPosts(limit: number = 3): Post[] {
+  const posts = getAllPosts()
+  return posts
+    .filter((post) => post.updated)
+    .sort((a, b) => (a.updated > b.updated ? -1 : 1))
+    .slice(0, limit)
+}
