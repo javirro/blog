@@ -2,7 +2,7 @@
 title: 'Anvil Foundry Guide: High-Performance Local Ethereum Node for Testing'
 description: 'Understanding how to run blockchain EVM node with Anvil.'
 date: '2026-02-01'
-updated: '2026-02-05'
+updated: '2026-02-10'
 author: 'Javier Rodriguez'
 tags: ['foundry', 'anvil', 'smart contracts',  'ethereum', 'web3', 'EVM']
 
@@ -14,18 +14,25 @@ tags: ['foundry', 'anvil', 'smart contracts',  'ethereum', 'web3', 'EVM']
 supports Mainnet forking to simulate real-world environments, and offers instant mining for rapid smart contract debugging.
 </i>
 
-<br /><br />
+## Table of Contents
+- [Anvil examples](#anvil-examples)
+  - [Basic initialization](#basic-initialization)
+  - [Forking real networks](#forking-real-networks)
+- [Similar alternatives to Anvil](#similar-alternatives-to-anvil)
+- [Frequently Asked Questions](#frequently-asked-questions)
+- [Extra resources](#extra-resources)
+
+<br />
 Foundry is a key tool to work with smart contracts in Solidity and EVM networks. Foundry provides a set of tools to facilitate the development, testing,
 and deployment of smart contracts. One of these tools is <b>Anvil</b>.
-
-
 
 Anvil is a local Ethereum node that runs on your machine. It is designed to be fast and lightweight. It allows developers to test and debug their smart contracts
 locally without needing to connect to a remote Ethereum network. Anvil provides a set of features that make it easy to work with smart contracts, such as instant mining,
 automatic account creation, and support for multiple networks.
 In this post, we will explore some examples of how to use Anvil in real-world scenarios.
 
-## Anvil examples
+
+## <a id="anvil-examples"></a>Anvil examples
 
 <br />
 In this section, we will see some practical examples of how to use Anvil in different scenarios.
@@ -34,7 +41,7 @@ In this section, we will see some practical examples of how to use Anvil in diff
 
 <br /><br />
 
-### Basic initialization
+### <a id="basic-initialization"></a>Basic initialization
 
 <br />
 The simpliest scenario is to run Anvil with the default configuration. This will start a local Ethereum node on your machine with default settings.
@@ -56,7 +63,7 @@ The chainId will be <b>31337</b> by default. Specifically, here are the main def
 
 These defaults are ideal for rapid development and testing without waiting for block confirmations. You can use this network to deploy and test your smart contracts locally, to connect your dApps, or to run scripts that interact with the blockchain. 
 
-### Forking real networks
+### <a id="forking-real-networks"></a>Forking real networks
 <br />
 One of the most common use cases of Anvil is to fork real blockchain networks. This allows you to create a local copy of the state of a real network, such as Mainnet, Goerli, or Sepolia.
 
@@ -75,7 +82,7 @@ Anvil offers additional options for forking, such as specifying a block number t
 All these options are essential to customize the behavior of your local node and to adapt it to your specific needs. You can totally simulate the behavior of a real network with Anvil.
 
 
-## Similar alternatives to Anvil
+## <a id="similar-alternatives-to-anvil"></a>Similar alternatives to Anvil
 <br />
 
 There are other similar alternatives to Anvil that you can use for local Ethereum development. Some of the most popular ones are compared below:
@@ -83,7 +90,7 @@ There are other similar alternatives to Anvil that you can use for local Ethereu
 
 <AnvilComparisonTable />
 
-## Frequently Asked Questions
+## <a id="frequently-asked-questions"></a>Frequently Asked Questions
 <br />
 
 ### What is Anvil used for?
@@ -102,7 +109,7 @@ Yes, Anvil can fork any EVM-compatible network including Ethereum mainnet, Sepol
 Anvil creates 10 test accounts, each pre-funded with 10,000 ETH for testing purposes.
 
 
-## Extra resources
+## <a id="extra-resources"></a>Extra resources
 <br />
 If you want to learn more about Anvil and all the scenarios it supports, you can check the official documentation at
 <a href="https://getfoundry.sh/anvil/reference/anvil" target="_blank" rel="noopener noreferrer">Anvil official docs</a>

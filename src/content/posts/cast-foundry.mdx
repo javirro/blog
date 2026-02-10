@@ -2,7 +2,7 @@
 title: 'Foundry Cast Tutorial: Interacting with Smart Contracts via CLI'
 description: 'Understanding Cast with real-world examples.'
 date: '2026-02-01'
-updated: '2026-02-05'
+updated: '2026-02-10'
 author: 'Javier Rodriguez'
 tags: ['foundry', 'cast', 'blockchain', 'smart contracts', 'solidity', 'ethereum', 'EVM']
 
@@ -11,6 +11,15 @@ tags: ['foundry', 'cast', 'blockchain', 'smart contracts', 'solidity', 'ethereum
 <i>
 **TL;DR**: Cast is the Foundry CLI tool used to interact with Ethereum smart contracts and EVM blockchain nodes. Key features include: number format conversions (decimal/hex), reading contract state with `cast call`, writing transactions with `cast send`, and secure private key management via encrypted keystore. Supports RPC configuration through CLI flags, environment variables, or foundry.toml.
 </i>
+
+## Table of Contents
+- [Cast examples](#cast-examples)
+  - [Number decimal - hexadecimal conversion](#number-decimal---hexadecimal-conversion)
+  - [Call smart contracts to read values](#call-smart-contracts-to-read-values)
+  - [Write smart contracts to update values](#write-smart-contracts-to-update-values)
+  - [Handle private keys and addresses](#handle-private-keys-and-addresses)
+- [Frequently Asked Questions](#frequently-asked-questions)
+- [Extra resources](#extra-resources)
 
 
 <br />
@@ -24,7 +33,9 @@ such as sending transactions, querying contract state, making data conversions,
 and more. In this post, we will explore some examples of how to use Cast in
 real-world scenarios working with EVM networks.
 
-## Cast examples
+
+
+## <a id="cast-examples"></a>Cast examples
 
 <br />
 In this section, we will see some practical examples of how to use Cast for
@@ -34,7 +45,7 @@ different purposes, such as number conversion, reading smart contract values, wr
 
 <br /><br />
 
-### Number decimal - hexadecimal conversion
+### <a id="number-decimal---hexadecimal-conversion"></a>Number decimal - hexadecimal conversion
 
 <br />
 One of the simplest use cases of Cast is to convert numbers between decimal and hexadecimal
@@ -48,7 +59,7 @@ formats. Used especially when dealing with smart contract data.
 
 Those are just two simple examples, but Cast supports many other conversions, such as to-bool, to-address, to-bytes32, etc.
 
-### Call smart contracts to read values
+### <a id="call-smart-contracts-to-read-values"></a>Call smart contracts to read values
 <br />
 One of the most common use cases of Cast is to call smart contract functions to read data from the blockchain. It permits easyly
 querying contract state without needing to write any code.
@@ -72,7 +83,7 @@ requires two parameters: the owner address and the spender address. Furthermore,
 cast call [contract_address] "allowance(address, address)(uint256)" [param1] [param2] --rpc-url [network_rpc_url]
 </ConsoleCommandBlock>
 
-### Write smart contracts to update values
+### <a id="write-smart-contracts-to-update-values"></a>Write smart contracts to update values
 <br />
 Another important use case of Cast is to send transactions to smart contracts to update their state. This allows you to interact with contracts and modify their data.
 
@@ -95,7 +106,7 @@ In this second example, we are using the cast parse-units command to convert a h
   cast send --private-key $PRIVATE_KEY [contract_address] "mint(address,uint256)" [param1] $(cast parse-units 5) --rpc-url $RPC_URL
 </ConsoleCommandBlock>
 
-### Handle private keys and addresses
+### <a id="handle-private-keys-and-addresses"></a>Handle private keys and addresses
 <br />
 Cast also provides commands to handle  private keys securely. To understand the importance of this, we must understand that in production
 environments, private keys should never be hardcoded, exposed in the code or even included in a .env file.
@@ -123,7 +134,7 @@ forge script script/general/DeploySimpleTest.s.sol --fork-url [rpc_url] --accoun
 This command will use the private key associated with the specified key name to sign the transactions.
 
 
-## Frequently Asked Questions
+## <a id="frequently-asked-questions"></a>Frequently Asked Questions
 <br />
 ### What is Cast used for?
 Cast is a command-line tool from the Foundry toolkit used for interacting with Ethereum nodes and smart contracts. It enables reading contract data, sending transactions, converting data formats, and managing private keys without writing code.
@@ -155,7 +166,7 @@ Include parameters after the function signature in order. Example: `cast call 0x
 ### Do I need to specify return types in Cast function signatures?
 For `cast call` (read operations), specifying return types like `(uint256)` helps Cast properly decode and display the response. For `cast send` (write operations), return types are typically not needed.
 
-### Extra resources
+## <a id="extra-resources"></a>Extra resources
 <br />
 If you want to learn more about Cast and its capabilities, you can check the official documentation at
 <a href="https://getfoundry.sh/cast/overview" target="_blank" rel="noopener noreferrer">Cast official docs</a>
