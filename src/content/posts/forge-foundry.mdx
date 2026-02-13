@@ -1,11 +1,11 @@
 ---
 title: 'Forge Foundry Guide: Comprehensive Smart Contract Development and Testing Framework'
-description: 'Understanding Forge, the core tool of Foundry for Solidity smart contract development and testing.'
-date: '2026-02-07'
-updated: '2026-02-10'
+description: 'Master Forge for Solidity development. Learn how to compile, test, and deploy Ethereum smart contracts with the fastest EVM toolkit available.'
+date: '2026-02-07T09:00:00Z'
+updated: '2026-02-13T10:00:00Z'
 author: 'Javier Rodriguez'
-tags: ['foundry', 'forge', 'smart contracts',  'ethereum', 'web3', 'EVM', 'solidity', 'testing', 'development']
-
+tags: ['foundry', 'forge', 'smart-contracts', 'ethereum', 'web3', 'evm', 'solidity', 'testing']
+published: true
 ---
 
 <br />
@@ -121,6 +121,15 @@ To compile and run any command in the different profiles, you can set the value 
   FOUNDRY_PROFILE=production forge test
 </ConsoleCommandBlock>
 
+When you are running a smart contract compilation, you should be aware of the smart contract size limit in EVM networks, which is 24KB. If your compiled bytecode exceeds this limit, you will not be able to deploy your contract on the network. In such cases, you may need to optimize your code or split it into smaller contracts to fit within the size limit.
+To check the size of your compiled contracts, you can use the following command:
+
+<ConsoleCommandBlock>
+ forge build --sizes
+</ConsoleCommandBlock>
+
+This command will display the size of each compiled contract, allowing you to identify any contracts that may exceed the size limit and need optimization or refactoring.
+
 
 ### <a id="forge-cache"></a>Forge cache
 
@@ -161,6 +170,12 @@ The flags `--match-contract` and `--match-test` allow you to specify the contrac
 Another useful flag is `--vvvv`, which allows you to increase the verbosity of the test output. This can be very helpful for debugging and understanding the test execution flow.
  As you increase the verbosity level, you will see more detailed information about the test execution, including the values of variables, the execution flow, and any errors that occur.
 The max level of verbosity is 5.
+
+When you are working with test, it is very important to know the part of your code you are covering with your tests. You can use the following command which generates a coverage report that shows which lines of code are covered by your tests and which are not.
+
+<ConsoleCommandBlock>
+ forge coverage
+</ConsoleCommandBlock>
 
 ## <a id="scripting"></a>Scripting
 
@@ -216,4 +231,5 @@ If you want to learn more about Anvil and all the scenarios it supports, you can
 <a href="https://getfoundry.sh/anvil/reference/anvil" target="_blank" rel="noopener noreferrer">Anvil official docs</a>
 
 Furthermore, if you want to learn more about another Foundry tools, you can check the <RedirectOwnPost route="/posts/cast-foundry" text="Foundry Cast tutorial for smart contract interaction" />,
-where we explain how to use Cast, the command-line tool from Foundry to interact with Ethereum nodes and smart contracts.
+where we explain how to use Cast, the command-line tool from Foundry to interact with Ethereum nodes and smart contracts or if you are interested in the local Ethereum node from Foundry, you can check the
+<RedirectOwnPost route="/posts/anvil-foundry" text="Foundry Anvil tutorial for local Ethereum node" />, where we explain how to use Anvil, the local Ethereum node from Foundry for testing and development.

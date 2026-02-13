@@ -25,7 +25,14 @@ export async function generateMetadata({ params }: Params) {
   return {
     title: post?.title,
     description: post?.description,
-    canonical: `https://blog.techsmachine.com/posts/${slug}`
+    canonical: `https://blog.techsmachine.com/posts/${slug}`,
+    openGraph: {
+      modifiedTime: post?.updated,
+      title: post?.title,
+      description: post?.description,
+      url: `https://blog.techsmachine.com/posts/${slug}`,
+      publisedTime: post?.date,
+    }
   }
 }
 
@@ -40,7 +47,7 @@ export default async function PostPage({ params }: Params) {
   // Structured Data (JSON-LD) for SEO. It must be rendered inside the article page in Server side components.
   const schemaArticle = {
     '@context': 'https://schema.org',
-    '@type': 'Article',
+    '@type': 'TechArticle',
     headline: post.title,
     description: post.description,
     datePublished: post.date,
