@@ -51,13 +51,14 @@ export const ConsoleCommandBlock = ({ children }: ConsoleCommandProps) => {
         </span>
       )}
 
-      <pre style={{ margin: 0, overflowX: 'auto' }}>
+      <pre style={{ margin: 0, overflowX: 'auto', padding: '8px' }}>
         <code
           id="command-text"
           style={{
             color: '#c4b5fd',
             display: 'block',
-            fontFamily: 'monospace'
+            fontFamily: 'monospace',
+            fontSize: '14px'
           }}
         >
           {children}
