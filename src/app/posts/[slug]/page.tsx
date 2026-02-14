@@ -6,6 +6,7 @@ import { SolidityBlock } from '@/ui/posts/SolidityBlock'
 import { ConsoleCommandBlock } from '@/ui/posts/ConsoleCommand'
 import { AnvilComparisonTable } from '@/ui/posts/AnvilComparisonTable'
 import RedirectOwnPost from '@/ui/posts/RedirectOwnPost'
+import { formatDate } from '@/lib/formatDate'
 
 interface Params {
   params: Promise<{
@@ -31,7 +32,7 @@ export async function generateMetadata({ params }: Params) {
       title: post?.title,
       description: post?.description,
       url: `https://blog.techsmachine.com/posts/${slug}`,
-      publisedTime: post?.date,
+      publisedTime: post?.date
     }
   }
 }
@@ -68,18 +69,8 @@ export default async function PostPage({ params }: Params) {
         href="/posts"
         className="inline-flex items-center gap-2 text-sm sm:text-base text-indigo-400 hover:text-indigo-300 transition-colors mb-6 sm:mb-8 group"
       >
-        <svg
-          className="w-4 h-4 sm:w-5 sm:h-5 transition-transform group-hover:-translate-x-1"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M10 19l-7-7m0 0l7-7m-7 7h18"
-          />
+        <svg className="w-4 h-4 sm:w-5 sm:h-5 transition-transform group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
         </svg>
         Back to Blog
       </Link>
@@ -95,7 +86,7 @@ export default async function PostPage({ params }: Params) {
             clipRule="evenodd"
           />
         </svg>
-        <time>{post.date}</time>
+        <time>{formatDate(post.date)}</time>
       </div>
       <div className="prose prose-sm sm:prose-base lg:prose-xl max-w-none prose-headings:scroll-mt-20 prose-img:rounded-lg prose-pre:max-w-full prose-pre:overflow-x-auto px-4">
         <MDXRemote
