@@ -5,6 +5,7 @@ import { MDXRemote } from 'next-mdx-remote/rsc'
 import { SolidityBlock } from '@/ui/posts/SolidityBlock'
 import { ConsoleCommandBlock } from '@/ui/posts/ConsoleCommand'
 import { AnvilComparisonTable } from '@/ui/posts/AnvilComparisonTable'
+import { SCAvsEOATable } from '@/ui/posts/SCAvsEOATable'
 import RedirectOwnPost from '@/ui/posts/RedirectOwnPost'
 import { formatDate } from '@/lib/formatDate'
 
@@ -142,6 +143,7 @@ export default async function PostPage({ params }: Params) {
             SolidityBlock,
             ConsoleCommandBlock,
             AnvilComparisonTable,
+            SCAvsEOATable,
             RedirectOwnPost
           }}
         />

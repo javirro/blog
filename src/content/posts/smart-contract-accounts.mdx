@@ -1,6 +1,6 @@
 ---
-title: 'Smart Contract Accounts (SCA): How to Build and Deploy Your Own on Ethereum'
-description: 'Step-by-step guide to building smart contract accounts in Solidity. Learn SCA vs EOA differences, factory pattern deployment, and gasless transaction setup for dApps.'
+title: 'Smart Contract Accounts | EVM Solidity Guide & Code Examples'
+description: 'Learn how smart contract accounts work on EVM chains and build your own Ethereum smart contract account with secure Solidity code and real-world use cases.'
 date: '2026-02-21T09:00:00Z'
 updated: '2026-02-21T18:00:00Z'
 author: 'Javier Rodriguez'
@@ -16,10 +16,12 @@ To create a smart contract account, you can deploy a smart contract that impleme
 This guide covers the benefits of smart contract accounts, how to create them, and best practices for secure and efficient management.*
 
 ## Table of Contents
-- [How to create smart contract accounts](#sca-create)
+- [Smart contract accounts vs. EOA: key differences](#sca-vs-eoa)
+- [How to create smart contract accounts in Solidity](#sca-create)
 - [Scenarios to use smart contract accounts](#scenarios-scas)
   - [Backend managed accounts for dApps](#scenarios-scas-backend-managed-accounts)
   - [Example of smart contract accounts as backend managed accounts for dApps](#example-backend-managed-accounts)
+- [Smart contract accounts and account abstraction (ERC-4337)](#sca-account-abstraction)
 - [Frequently Asked Questions](#frequently-asked-questions)
 - [Extra resources](#extra-resources)
 
@@ -29,10 +31,19 @@ Unlike externally owned accounts (EOAs) that are controlled by private keys, sma
 They can execute functions, manage assets, and interact with other contracts on the blockchain. In general terms, smart contract accounts are programmable accounts that can perform complex operations and automate tasks on the blockchain.
 They are essential for building decentralized applications (dApps) and implementing various use cases such as decentralized finance (DeFi), non-fungible tokens (NFTs), and more.
 In this guide, we will explore the benefits of smart contract accounts, how to create them, and best practices for secure and efficient management.
+To follow along with the Solidity code examples, you will need Foundry installed. Check the <RedirectOwnPost route="/posts/forge-foundry" text="Foundry Forge tutorial" /> to learn how to compile, test, and deploy the contracts shown here.
 
+## <a id="sca-vs-eoa"></a>Smart contract accounts vs. EOA: key differences
 
+<br />
 
-## <a id="sca-create"></a>How to create smart contract accounts
+Before building a smart contract account, it is important to understand how they differ from externally owned accounts (EOAs) — the standard accounts used by most Ethereum wallets like MetaMask.
+
+<SCAvsEOATable />
+
+The key takeaway: EOAs are simpler and sufficient for personal use, but when you need programmable logic, shared ownership, or a gasless UX for dApp users, a smart contract account is the right tool.
+
+## <a id="sca-create"></a>How to create smart contract accounts in Solidity
 
 <br />
 In this section, we will see how to create smart contract accounts using Solidity.
@@ -174,6 +185,8 @@ The main drawback is that the dApp's backend must handle a private key for each 
 Overall, using smart contract accounts as backend managed accounts for dApps can provide a more seamless and secure user experience, while also enabling features like gasless transactions that can enhance user engagement and adoption of the dApp.
 
 ### <a id="example-backend-managed-accounts"></a>Example of smart contract accounts as backend managed accounts for dApps
+
+
 <br />
 
 To use smart contract accounts as backend managed accounts for dApps, we must deploy a smart contract account for each user of the dApp. To facilitate and organize the deployment of the SCAs,
@@ -244,6 +257,20 @@ The main aspects of this implementation are the following:
 > The code provided in this article is intended to be executed on a single blockchain. For multichain scenarios, there are additional aspects that must be considered, which are covered in other posts.
 > This code is for educational purposes and should not be used in production without proper security audits and testing.
 
+## <a id="sca-account-abstraction"></a>Smart contract accounts and account abstraction (ERC-4337)
+
+<br />
+
+Smart contract accounts are the foundation of **account abstraction** on Ethereum. [ERC-4337](https://eips.ethereum.org/EIPS/eip-4337) is the Ethereum standard that formalizes this concept, allowing users to interact with the blockchain without ever managing private keys directly. Instead of EOAs submitting transactions, ERC-4337 introduces a mempool of **UserOperations** — signed intents that a Bundler picks up and forwards to an `EntryPoint` contract, which then calls the user's smart contract account.
+
+The `SmartContractAccount` built in this guide is a direct precursor to an ERC-4337 compliant account. The main additions required to make it fully ERC-4337 compatible are:
+
+- A `validateUserOp(UserOperation calldata userOp, bytes32 userOpHash, uint256 missingAccountFunds)` function to validate operations signed off-chain.
+- Integration with the singleton `EntryPoint` contract deployed on Ethereum.
+- Optional **paymaster** support, allowing a third party to sponsor gas fees on behalf of users.
+
+In a future post, we will extend the `SmartContractAccount` shown here into a full ERC-4337 implementation. If you want to start preparing now, the <RedirectOwnPost route="/posts/forge-foundry" text="Foundry Forge guide" /> covers everything you need to write and test this kind of contract, and the <RedirectOwnPost route="/posts/anvil-foundry" text="Anvil local node guide" /> shows how to run a local EVM environment to iterate quickly.
+
 ## <a id="frequently-asked-questions"></a>Frequently Asked Questions
 <br />
 
@@ -258,6 +285,15 @@ Common use cases for smart contract accounts include multi-signature wallets, au
 
 ### How can smart contract accounts be used as backend managed accounts for dApps?
 Smart contract accounts can be used as backend managed accounts for dApps by deploying a smart contract account for each user of the dApp. A factory contract can be created to facilitate the deployment and organization of these smart contract accounts, allowing the dApp to manage user accounts efficiently on the blockchain.
+
+### What is the difference between a smart contract account and an EOA?
+An externally owned account (EOA) is controlled by a private key and can initiate transactions directly. A smart contract account is controlled by Solidity code, cannot initiate transactions on its own, but offers programmable logic such as multi-signature, access control, gasless transaction support, and automated execution — making it far more flexible for dApp development.
+
+### What is ERC-4337 and how does it relate to smart contract accounts?
+ERC-4337 is the Ethereum standard for account abstraction. It formalizes how smart contract accounts can receive and validate off-chain signed user operations via a Bundler and a singleton EntryPoint contract. This enables use cases like gasless transactions, social recovery, and session keys, all built on top of the smart contract account pattern described in this guide.
+
+### Can a smart contract account deploy other smart contracts?
+Yes. Because a smart contract account can execute arbitrary calls via its `execute` function, it can deploy other contracts by passing the deployment bytecode as `data` with `to` set to `address(0)`. This is the basis of the factory pattern shown in this guide.
 
 ## <a id="extra-resources"></a>Extra resources
 <br />
