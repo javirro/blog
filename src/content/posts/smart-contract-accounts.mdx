@@ -142,7 +142,13 @@ For simplicity, in this first approach of SCAs implementation, we only allow the
 - To handle incoming Ether, the contract has a `receive` function that emits an event whenever Ether is sent to the contract. It also has a `fallback` function to handle calls with data that do not match any existing function signature. 
 Furthermore, there is an `emergencyWithdraw` function that allows the owner to withdraw Ether from the contract in case of an emergency. In this function, Reentrancy guard prevention is not implemented because it is only callable by the owner and it is not calling any external contract, but in a more complex implementation, it would be advisable to include it.
 
+### <a id="execute-function"></a>Execute function
+<br />
+The `execute` function is a critical component of the smart contract account, as it allows the owner to perform actions on the blockchain. It takes three parameters: the destination address (`to`), the value of Ether to be sent (`value`), and the data to be sent with the call (`data`).
+The smart contract account resend the transaction with the same parameters that the owner sent to the `execute` function, but it is the smart contract account which is sending the transaction to the destination address. This means that the smart contract account is the one that is interacting with other contracts or transferring Ether, while the owner is just authorizing these actions by calling the `execute` function.
+This design allows for a clear separation of concerns, where the owner is responsible for authorizing actions, while the smart contract account is responsible for executing them. It also enables the implementation of additional logic and security measures within the `execute` function, such as access control, transaction limits, or custom event logging.
 
+In the destination smart contract, the `msg.sender` will be the address of the smart contract account, not the owner. This is an important aspect to consider when designing the logic of the destination contract, as it may need to implement specific functionality to recognize and interact with the smart contract account.
 
 ## <a id="scenarios-scas"></a>Scenarios to use smart contract accounts
 <br />
