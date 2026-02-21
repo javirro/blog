@@ -2,7 +2,7 @@
 title: 'Forge Foundry Guide: Comprehensive Smart Contract Development and Testing Framework'
 description: 'Master Forge for Solidity development. Learn how to compile, test, and deploy Ethereum smart contracts with the fastest EVM toolkit available.'
 date: '2026-02-07T09:00:00Z'
-updated: '2026-02-13T10:00:00Z'
+updated: '2026-02-21T09:00:00Z'
 author: 'Javier Rodriguez'
 tags: ['foundry', 'forge', 'smart-contracts', 'ethereum', 'web3', 'evm', 'solidity', 'testing']
 category: 'tooling'
@@ -10,11 +10,10 @@ published: true
 ---
 
 <br />
-<i>
-**TL;DR**: Forge is a powerful tool for Solidity smart contract development and testing within the Foundry framework.
+
+*__TL;DR__: Forge is a powerful tool for Solidity smart contract development and testing within the Foundry framework.
 It offers features like fast compilation, flexible testing with fuzzing and property-based testing, support for multiple networks.
-Forge is designed to streamline the entire smart contract development lifecycle from coding to deployment in EVM blockchain networks.
-</i>
+Forge is designed to streamline the entire smart contract development lifecycle from coding to deployment in EVM blockchain networks.*
 
 ## Table of Contents
 - [Compilation](#compilation)
@@ -29,7 +28,7 @@ Forge is designed to streamline the entire smart contract development lifecycle 
 
 <br />
 Foundry is a key tool to work with smart contracts in Solidity and EVM networks. Foundry provides a set of tools to facilitate the development, testing,
-and deployment of smart contracts. One of these tools is <b>Forge</b>.
+and deployment of smart contracts. One of these tools is **Forge**.
 
 Forge is the core tool of Foundry for Solidity smart contract development and testing. It provides a powerful and flexible environment for writing, compiling, testing, and deploying smart contracts.
 Forge is designed to be fast and efficient, allowing developers to iterate quickly on their code and test it thoroughly.
@@ -44,14 +43,14 @@ In this post, we will explore some examples of how to use Forge in real-world sc
 One of the first steps in smart contract development is to compile your Solidity code.
 Forge provides a fast and efficient compiler that supports multiple versions of Solidity and allows you to configure the compilation process with various options.
 
-<i>If you want to copy the commands, just click on the command box and it will be copied to your clipboard. </i>
+*If you want to copy the commands, just click on the command box and it will be copied to your clipboard.*
 
 <br /><br />
 
 ### <a id="basic-compilation"></a>Basic compilation
 
 <br />
-The simpliest scenario is to run Forge with the default configuration. Forge auto-detects the required Solidity version from your contracts' pragma statements and downloads the compiler automatically.
+The simplest scenario is to run Forge with the default configuration. Forge auto-detects the required Solidity version from your contracts' pragma statements and downloads the compiler automatically.
 You can do this by running the following command in your terminal:
 <ConsoleCommandBlock>
 forge build
@@ -146,7 +145,7 @@ However, in some scenarios it is necessary to force the recompilation of all the
 
 <br />
 
-Other of the most common operations we can do with Forge is to test our smart contracts. Forge provides a powerful and flexible environment for testing smart contracts.
+One of the most common operations we can do with Forge is to test our smart contracts. Forge provides a powerful and flexible environment for testing smart contracts.
 
 To run all the tests in your project, you can use the following command:
 
@@ -196,7 +195,7 @@ If you want to execute the script on a live network, you can use the `--broadcas
  forge script [script_path] --broadcast --rpc-url [network_rpc_url]
 </ConsoleCommandBlock>
 
-Anyway, if you are interested in learning more about scripting with Forge, you can check this post where we strong explain how to write and execute scripts with Forge.
+If you are interested in learning more about scripting with Forge, you can check this post where we explain in detail how to write and execute scripts with Forge.
 
 ## <a id="formatting"></a>Formatting
 <br />
@@ -210,7 +209,7 @@ To format your code with Forge, you can use the following command:
 
 The formatting configuration should be customized in the `foundry.toml` file. You can specify various options such as indentation, line length, and more.
 If you want to see the available options, you can check the official documentation at
-<a href="https://www.getfoundry.sh/config/reference/formatter" target="_blank" rel="noopener noreferrer">Formatter official docs</a>
+[Formatter official docs](https://www.getfoundry.sh/config/reference/formatter)
 
 ## <a id="frequently-asked-questions"></a>Frequently Asked Questions
 <br />
@@ -232,8 +231,8 @@ The recommended way is using `forge script` with the `--broadcast` flag. This al
 
 ## <a id="extra-resources"></a>Extra resources
 <br />
-If you want to learn more about Anvil and all the scenarios it supports, you can check the official documentation at
-<a href="https://getfoundry.sh/anvil/reference/anvil" target="_blank" rel="noopener noreferrer">Anvil official docs</a>
+If you want to learn more about Forge and all the scenarios it supports, you can check the official documentation at
+[Forge official docs](https://getfoundry.sh/forge/overview)
 
 Furthermore, if you want to learn more about another Foundry tools, you can check the <RedirectOwnPost route="/posts/cast-foundry" text="Foundry Cast tutorial for smart contract interaction" />,
 where we explain how to use Cast, the command-line tool from Foundry to interact with Ethereum nodes and smart contracts or if you are interested in the local Ethereum node from Foundry, you can check the

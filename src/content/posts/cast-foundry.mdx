@@ -2,16 +2,14 @@
 title: 'Foundry Cast Tutorial: Interacting with Smart Contracts via CLI'
 description: 'Learn how to use Foundry Cast to call smart contract functions, send transactions, and query blockchain data directly from your terminal.'
 date: '2026-02-01T08:00:00Z'
-updated: '2026-02-13T14:30:00Z'
+updated: '2026-02-21T09:00:00Z'
 author: 'Javier Rodriguez'
 tags: ['foundry', 'cast', 'blockchain', 'smart-contracts', 'solidity', 'ethereum', 'evm']
 category: 'tooling'
 published: true
 ---
 
-<i>
-**TL;DR**: Cast is the Foundry CLI tool used to interact with Ethereum smart contracts and EVM blockchain nodes. Key features include: number format conversions (decimal/hex), reading contract state with `cast call`, writing transactions with `cast send`, and secure private key management via encrypted keystore. Supports RPC configuration through CLI flags, environment variables, or foundry.toml.
-</i>
+*__TL;DR__: Cast is the Foundry CLI tool used to interact with Ethereum smart contracts and EVM blockchain nodes. Key features include: number format conversions (decimal/hex), reading contract state with `cast call`, writing transactions with `cast send`, and secure private key management via encrypted keystore. Supports RPC configuration through CLI flags, environment variables, or foundry.toml.*
 
 ## Table of Contents
 - [Cast examples](#cast-examples)
@@ -26,7 +24,7 @@ published: true
 <br />
 Foundry is the most relevant and used frameworks nowadays to work with smart contracts
 in Solidity and EVM networks. Foundry provides a set of tools to facilitate the development, testing,
-and deployment of smart contracts. One of these tools is <b>Cast</b>.
+and deployment of smart contracts. One of these tools is **Cast**.
 
 Cast is a command-line tool that allows you to interact with Ethereum nodes and
 smart contracts. It provides a variety of commands to perform different tasks,
@@ -42,7 +40,7 @@ real-world scenarios working with EVM networks.
 In this section, we will see some practical examples of how to use Cast for
 different purposes, such as number conversion, reading smart contract values, writing smart contract values and handle private keys.
 
-<i>If you want to copy the commands, just click on the command box and it will be copied to your clipboard. </i>
+*If you want to copy the commands, just click on the command box and it will be copied to your clipboard.*
 
 <br /><br />
 
@@ -62,22 +60,20 @@ Those are just two simple examples, but Cast supports many other conversions, su
 
 ### <a id="call-smart-contracts-to-read-values"></a>Call smart contracts to read values
 <br />
-One of the most common use cases of Cast is to call smart contract functions to read data from the blockchain. It permits easyly
+One of the most common use cases of Cast is to call smart contract functions to read data from the blockchain. It allows easily
 querying contract state without needing to write any code.
 
 The aspects that must be considered are:
-<ul>
-<li> <b>The contract address: </b> The address of the smart contract you want to interact with. </li>
-<li> <b>The function signature: </b> The signature of the function you want to call. </li>
-<li> <b>The network RPC URL: </b> The URL of the Ethereum node you want to connect to. You can include directly in the cast service, you can read from .env file or
-you can configure it in the foundry.toml file. </li>
-</ul>
+
+- **The contract address:** The address of the smart contract you want to interact with.
+- **The function signature:** The signature of the function you want to call.
+- **The network RPC URL:** The URL of the Ethereum node you want to connect to. You can include it directly in the cast command, read it from a .env file, or configure it in the foundry.toml file.
 <ConsoleCommandBlock>
   cast call [contract_address] "number()" --rpc-url [network_rpc_url]
 </ConsoleCommandBlock>
 
 In this second example, we are calling the allowance function of an ERC20 token contract to check the allowance
-that an address has given to another address. The main differece with the previous example is that this function
+that an address has given to another address. The main difference with the previous example is that this function
 requires two parameters: the owner address and the spender address. Furthermore, in this case we are passing the response type (uint256).
  
 <ConsoleCommandBlock>
@@ -89,13 +85,11 @@ cast call [contract_address] "allowance(address, address)(uint256)" [param1] [pa
 Another important use case of Cast is to send transactions to smart contracts to update their state. This allows you to interact with contracts and modify their data.
 
 When sending transactions, you need to consider:
-<ul>
-<li> <b>The private key: </b> The private key of the account you want to use to sign the transaction. </li>
-<li> <b>The contract address: </b> The address of the smart contract you want to interact with. </li>
-<li> <b>The function signature: </b> The signature of the function you want to call. </li>
-<li> <b>The network RPC URL: </b> The URL of the Ethereum node you want to connect to. You can include directly in the cast service, you can read from .env file or
-you can configure it in the foundry.toml file. </li>
-</ul>
+
+- **The private key:** The private key of the account you want to use to sign the transaction.
+- **The contract address:** The address of the smart contract you want to interact with.
+- **The function signature:** The signature of the function you want to call.
+- **The network RPC URL:** The URL of the Ethereum node you want to connect to. You can include it directly in the cast command, read it from a .env file, or configure it in the foundry.toml file.
 
 In this example, we are calling the mint function of an ERC20 token contract to mint new tokens to a specific address. The function requires two parameters: the recipient address and the amount of tokens to mint.
 <ConsoleCommandBlock>
@@ -109,7 +103,7 @@ In this second example, we are using the cast parse-units command to convert a h
 
 ### <a id="handle-private-keys-and-addresses"></a>Handle private keys and addresses
 <br />
-Cast also provides commands to handle  private keys securely. To understand the importance of this, we must understand that in production
+Cast also provides commands to handle private keys securely. To understand the importance of this, we must understand that in production
 environments, private keys should never be hardcoded, exposed in the code or even included in a .env file.
 Instead, they should be managed securely using the keystore.
 
@@ -118,7 +112,7 @@ The keystore is a secure storage mechanism that encrypts private keys and protec
 cast wallet import [key_name] --interactive
 </ConsoleCommandBlock>
 
-This command will prompt a interactve input in your terminal and you must to paste there the private key you want to store.
+This command will prompt an interactive input in your terminal where you must paste the private key you want to store.
 
 To see the list of private keys you have stored there, use:
 
@@ -170,7 +164,7 @@ For `cast call` (read operations), specifying return types like `(uint256)` help
 ## <a id="extra-resources"></a>Extra resources
 <br />
 If you want to learn more about Cast and its capabilities, you can check the official documentation at
-<a href="https://getfoundry.sh/cast/overview" target="_blank" rel="noopener noreferrer">Cast official docs</a>
+[Cast official docs](https://getfoundry.sh/cast/overview)
 
 Furthermore, if you want to learn more about another Foundry tools, you can check the <RedirectOwnPost route="/posts/anvil-foundry" text="Foundry Anvil tutorial for local Ethereum node" />,
 where we explain how to use Anvil, the local Ethereum node from Foundry or if you are interested in the main tool of the suite, you can check the <RedirectOwnPost route="/posts/forge-foundry" text="Foundry Forge tutorial for smart contract development and testing" />,

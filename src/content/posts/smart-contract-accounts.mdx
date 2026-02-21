@@ -1,0 +1,264 @@
+---
+title: 'Smart contract accounts: A practical guide to create your own smart contract account'
+description: 'Learn how to create your own smart contract account with this comprehensive guide. Discover the benefits of smart contract accounts, how to create them, and best practices for secure and efficient management.'
+date: '2026-02-21T09:00:00Z'
+updated: '2026-02-21T18:00:00Z'
+author: 'Javier Rodriguez'
+tags: ['solidity', 'wallet', 'smart-contracts', 'ethereum', 'web3', 'evm']
+category: 'development'
+published: true
+---
+<br />
+
+*__TL;DR__: Smart contract accounts (SCAs) are programmable accounts on EVM blockchains that can execute code and manage assets.
+They offer enhanced functionality, security, and automation compared to traditional externally owned accounts (EOAs).
+To create a smart contract account, you can deploy a smart contract that implements the desired logic and functionality.
+This guide covers the benefits of smart contract accounts, how to create them, and best practices for secure and efficient management.*
+
+## Table of Contents
+- [How to create smart contract accounts](#sca-create)
+- [Scenarios to use smart contract accounts](#scenarios-scas)
+  - [Backend managed accounts for dApps](#scenarios-scas-backend-managed-accounts)
+  - [Example of smart contract accounts as backend managed accounts for dApps](#example-backend-managed-accounts)
+- [Frequently Asked Questions](#frequently-asked-questions)
+- [Extra resources](#extra-resources)
+
+<br />
+Smart contract accounts (SCAs), also known as contract accounts, are a fundamental concept in Ethereum and other EVM-compatible blockchains.
+Unlike externally owned accounts (EOAs) that are controlled by private keys, smart contract accounts are controlled by code.
+They can execute functions, manage assets, and interact with other contracts on the blockchain. In general terms, smart contract accounts are programmable accounts that can perform complex operations and automate tasks on the blockchain.
+They are essential for building decentralized applications (dApps) and implementing various use cases such as decentralized finance (DeFi), non-fungible tokens (NFTs), and more.
+In this guide, we will explore the benefits of smart contract accounts, how to create them, and best practices for secure and efficient management.
+
+
+
+## <a id="sca-create"></a>How to create smart contract accounts
+
+<br />
+In this section, we will see how to create smart contract accounts using Solidity.
+
+*If you want to copy the commands, just click on the command box and it will be copied to your clipboard.*
+
+<br />
+The first thing that we must not forget is that a smart contract account is a smart contract.
+Some of the main requirements to build a smart contract account are the following:
+
+- **Nonce:** The nonce of the smart contract account, which is used to keep track of the number of transactions sent from the account. It must have the same functionality that EOAs have. It prevents replay attacks and ensures the correct order of transactions.
+- **Ether management:** The SCA must be able to receive, store, and send Ether. This includes handling incoming transactions, managing balances, and executing transfers according to the contract's logic. It must work as an externally owned account.
+- **Owner:** The owner of the smart contract account, which is typically an externally owned account (EOA) that has the authority to execute functions or manage the contract's assets. This is indispensable if we want to have our smart contract account managed securely.
+- **Execute function:** The SCA must include an execute function (you can use another name if you want) which allows the owner to execute calls to other contracts or transfer Ether. This function must receive at least three input parameters: the destination contract, the value included in the call, and the data to be sent.
+
+These are the main and indispensable requirements to create a smart contract account. However, there are many other features that you can include in your smart contract account, such as multi-signature functionality, time locks, or custom access control mechanisms. The specific implementation will depend on your use case and requirements.
+
+Here is an example of a smart contract account implementation that satisfies the requirements mentioned above:
+
+
+<SolidityBlock>
+```Solidity
+// SPDX-License-Identifier: MIT
+
+pragma solidity 0.8.33;
+
+contract SmartContractAccount {
+
+    address public owner;
+    uint256 public nonce;
+
+    event Executed(address indexed to, uint256 value, bytes data, bytes result, uint256 nonce);
+    event ReceivedEther(address indexed from, uint256 value);
+    event FallbackCalled(address indexed from, uint256 value, bytes data);
+
+    error NotOwner();
+    error NotEnoughEther();
+    error ExecutionFailed();
+    error ZeroAddressNotAllowed();
+
+    constructor(address _owner) {
+        if (_owner == address(0)) revert ZeroAddressNotAllowed();
+        owner = _owner;
+    }
+
+    modifier onlyOwner() {
+        if (msg.sender != owner) {
+            revert NotOwner();
+        }
+        _;
+    }
+
+    function execute(address to, uint256 value, bytes calldata data)
+    external payable onlyOwner returns (bytes memory) {
+        if (to == address(0)) revert ZeroAddressNotAllowed();
+        if (getEthBalance() < value) revert NotEnoughEther();
+        nonce++;
+        (bool success, bytes memory result) = to.call{value: value}(data);
+        if (!success) {
+            revert ExecutionFailed();
+        }
+        emit Executed(to, value, data, result, nonce);
+        return result;
+    }
+
+    function setOwner(address newOwner) external onlyOwner {
+        if (newOwner == address(0)) revert ZeroAddressNotAllowed();
+        owner = newOwner;
+    }
+
+    function emergencyWithdraw(address payable to, uint256 amount) external onlyOwner {
+        if (to == address(0)) revert ZeroAddressNotAllowed();
+        if (getEthBalance() < amount) revert NotEnoughEther();
+        (bool success, ) = to.call{value: amount}("");
+        if (!success) {
+            revert ExecutionFailed();
+        }
+    }
+
+    function getEthBalance() public view returns (uint256) {
+        return address(this).balance;
+    }
+
+    receive() external payable {
+        emit ReceivedEther(msg.sender, msg.value);
+    }
+
+    fallback() external payable {
+        emit FallbackCalled(msg.sender, msg.value, msg.data);
+    }
+}
+
+```
+</SolidityBlock>
+
+<br />
+We are going to detail the main aspects of this implementation:
+
+- The contract has an `owner` variable that stores the address of the owner of the smart contract account. This is set during the deployment of the contract and can be changed later by the current owner.
+In this case, we have used a custom owner management but it could be replaced with OpenZeppelin's `Ownable` contract for more standardized functionality.
+
+- The `nonce` variable keeps track of the number of transactions sent from the smart contract account. It is incremented each time the `execute` function is called to ensure the correct order of transactions.
+
+- The `execute` function allows the owner to execute calls to other contracts or transfer Ether. It checks that the caller is the owner, that the destination address is not zero, and that the contract has enough Ether to cover the value being sent. If all checks pass, it performs the call and emits an event with the details of the execution.
+For simplicity, in this first approach of SCAs implementation, we only allow the owner to execute calls. This means that only EOAs can interact with the smart contract account. In a future post, we will see how we can update this smart contract to turn it into a smart contract account implementing the concept of account abstraction and gasless transactions.
+
+- To handle incoming Ether, the contract has a `receive` function that emits an event whenever Ether is sent to the contract. It also has a `fallback` function to handle calls with data that do not match any existing function signature. 
+Furthermore, there is an `emergencyWithdraw` function that allows the owner to withdraw Ether from the contract in case of an emergency. In this function, Reentrancy guard prevention is not implemented because it is only callable by the owner and it is not calling any external contract, but in a more complex implementation, it would be advisable to include it.
+
+
+
+## <a id="scenarios-scas"></a>Scenarios to use smart contract accounts
+<br />
+
+Smart contract accounts can be used in a wide variety of scenarios and use cases. Here are some examples of scenarios where smart contract accounts can be particularly useful:
+
+- **Multi-Signature Wallets:** Smart contract accounts can implement multi-signature functionality, requiring multiple signatures to authorize transactions. This enhances security for managing funds and executing critical operations. The main change with the previous example for this case is that we will need to have several owners and some functionality to manage the confirmation of those owners.
+- **Automated Payments and Subscriptions:** Smart contract accounts can automate recurring payments or subscriptions, ensuring that payments are made on time without manual intervention.
+- **Backend managed accounts:** Smart contract accounts can be used as backend managed accounts for dApps, allowing the application to manage user funds and interactions with the blockchain on behalf of the users. This can provide a smoother user experience, especially for users who are not familiar with blockchain technology.
+This is the most common use case for smart contract accounts, as they can abstract away the complexities of blockchain interactions and provide a more user-friendly interface for dApps.
+
+### <a id="scenarios-scas-backend-managed-accounts"></a>Backend managed accounts for dApps
+<br />
+In this scenario, smart contract accounts are used as backend managed accounts for decentralized applications (dApps). This means that the dApp manages user funds and interactions with the blockchain on behalf of the users, providing a smoother and more user-friendly experience.
+This approach is very efficient for dApp admins because the process of executing actions on behalf of users is fully automated. The dApp can execute transactions, manage assets, and interact with other contracts without requiring users to have a deep understanding of blockchain technology or to manage their own private keys.
+Furthermore, this approach can also enhance security, as the dApp can implement additional security measures and controls to protect user funds and data. For example, the dApp can implement multi-signature functionality, time locks, or custom access control mechanisms to ensure that user funds are managed securely.
+
+Another relevant and very important aspect of using SCAs as backend managed accounts is enabling gasless transactions for users. This means that the dApp can cover the gas fees for users with a single EOA account that acts as a relayer, allowing them to interact with the blockchain without needing to hold Ether in their own wallets. This can significantly improve the user experience and make it easier for users to engage with the dApp.
+The solution which sometimes is compared with using SCAs as backend managed accounts is to use a custodial wallet service (EOAs) for each user, but this approach has several drawbacks compared to using smart contract accounts.
+The main drawback is that the dApp's backend must handle a private key for each user, and each time the dApp needs to execute an action on behalf of a user, it must pay the gas fees for the transaction, which can be very expensive and inefficient.
+
+
+Overall, using smart contract accounts as backend managed accounts for dApps can provide a more seamless and secure user experience, while also enabling features like gasless transactions that can enhance user engagement and adoption of the dApp.
+
+### <a id="example-backend-managed-accounts"></a>Example of smart contract accounts as backend managed accounts for dApps
+<br />
+
+To use smart contract accounts as backend managed accounts for dApps, we must deploy a smart contract account for each user of the dApp. To facilitate and organize the deployment of the SCAs,
+we can create a factory contract that will be responsible for deploying new smart contract accounts for users. This factory contract can also keep track of the deployed SCAs and their associated users.
+This is a very common pattern in the development of dApps that use smart contract accounts as backend managed accounts, as it allows for efficient management and organization of user accounts on the blockchain.
+
+Here is the Solidity code of a simple factory contract that deploys the `SmartContractAccount` for each user:
+<SolidityBlock>
+
+```Solidity
+
+// SPDX-License-Identifier: MIT
+
+pragma solidity 0.8.33;
+import {SmartContractAccount} from "./SmartContractAccount.sol";
+contract FactorySmartContractAccount {
+
+  address public owner;
+  uint256 public accountCount;
+  mapping(uint256 index => address) public accounts;
+  mapping(bytes32 userId => address) public userAccounts;
+
+  event UserAccountCreated(address indexed accountAddress, bytes32 indexed userIdentifier, uint256  accountId);
+
+  error UserIdentifierAlreadyHasAccount();
+  error NotOwner();
+  error ExecutionFailed();
+
+    modifier onlyOwner() {
+      if (msg.sender != owner) {
+          revert NotOwner();
+      }
+      _;
+  }
+
+  constructor(address owner_) {
+    owner = owner_;
+  }
+
+  function createUserAccount(bytes32 userIdentifier) public onlyOwner  {
+    if (userAccounts[userIdentifier] != address(0)) {
+      revert UserIdentifierAlreadyHasAccount();
+    }
+    SmartContractAccount newAccount = new SmartContractAccount(owner);
+    accounts[accountCount] = address(newAccount);
+    userAccounts[userIdentifier] = address(newAccount);
+    emit UserAccountCreated(address(newAccount), userIdentifier, accountCount);
+    accountCount++;
+  }
+
+  function setOwner(address newOwner) public onlyOwner {
+    owner = newOwner;
+  }
+}
+
+```
+</SolidityBlock>
+
+<br />
+
+The main aspects of this implementation are the following:
+
+- The `FactorySmartContractAccount` contract has an `owner` variable that stores the address of the owner of the factory, which is typically the dApp admin.
+- The factory has a `createUserAccount` function that allows the owner to create a new smart contract account for a user by providing a unique user identifier (e.g., a username or email hash). The factory keeps track of the deployed accounts and their associated user identifiers using mappings. When a new account is created, an event is emitted with the details of the created account, including its address and the associated user identifier. This allows the dApp to easily track and manage user accounts on the blockchain.
+
+>[WARNING]
+>
+> The code provided in this article is intended to be executed on a single blockchain. For multichain scenarios, there are additional aspects that must be considered, which are covered in other posts.
+> This code is for educational purposes and should not be used in production without proper security audits and testing.
+
+## <a id="frequently-asked-questions"></a>Frequently Asked Questions
+<br />
+
+### What are the smart contract accounts?
+Smart contract accounts are Ethereum accounts that are controlled by code (smart contracts) rather than private keys. They can execute predefined logic and interact with other contracts on the blockchain.
+
+### What are the main requirements for smart contract accounts?
+The main requirements for smart contract accounts include having a nonce to track transactions, the ability to manage Ether (receive, store, and send), an owner (typically an externally owned account) to control the account, and an execute function that allows the owner to perform calls to other contracts or transfer Ether.
+
+### What are some common use cases for smart contract accounts?
+Common use cases for smart contract accounts include multi-signature wallets, automated payments and subscriptions, and backend managed accounts for decentralized applications (dApps) that allow the dApp to manage user funds and interactions with the blockchain on behalf of the users.
+
+### How can smart contract accounts be used as backend managed accounts for dApps?
+Smart contract accounts can be used as backend managed accounts for dApps by deploying a smart contract account for each user of the dApp. A factory contract can be created to facilitate the deployment and organization of these smart contract accounts, allowing the dApp to manage user accounts efficiently on the blockchain.
+
+## <a id="extra-resources"></a>Extra resources
+<br />
+
+If you want to learn how to write, test and deploy the smart contracts in solidity, you can check the posts related with the most popular solidity development tool, Foundry:
+
+- <RedirectOwnPost route="/posts/forge-foundry" text="Foundry Forge tutorial for smart contract development" />
+- <RedirectOwnPost route="/posts/cast-foundry" text="Foundry Cast tutorial for smart contract interaction" />
+- <RedirectOwnPost route="/posts/anvil-foundry" text="Anvil Foundry tutorial for local blockchain development" />
+
