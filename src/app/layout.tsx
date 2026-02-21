@@ -22,17 +22,44 @@ const geistMono = Geist_Mono({
 })
 
 export const metadata: Metadata = {
-  title: 'Blockchain Blog',
+  title: {
+    default: 'techsmachine - Blockchain, Solidity & Web3 Development Blog',
+    template: '%s | techsmachine',
+  },
   description:
-    'Learn the most recent technologies for Blockchain, Solidity and Web3 development',
-    openGraph: {
+    'Tutorials and guides on blockchain development, Solidity smart contracts, Foundry tools, EVM networks, and Web3 dApp building. Written by developers, for developers.',
+  keywords: [
+    'blockchain',
+    'solidity',
+    'smart contracts',
+    'ethereum',
+    'web3',
+    'foundry',
+    'evm',
+    'dapp development',
+    'forge',
+    'cast',
+    'anvil',
+    'smart contract accounts',
+    'account abstraction',
+  ],
+  authors: [{ name: 'Javier Rodriguez' }],
+  creator: 'Javier Rodriguez',
+  metadataBase: new URL('https://blog.techsmachine.com'),
+  alternates: {
+    canonical: '/',
+  },
+  openGraph: {
     type: 'website',
     locale: 'en_US',
     url: 'https://blog.techsmachine.com',
     siteName: 'techsmachine',
+    title: 'techsmachine - Blockchain, Solidity & Web3 Development Blog',
+    description:
+      'Tutorials and guides on blockchain development, Solidity smart contracts, Foundry tools, EVM networks, and Web3 dApp building.',
     images: [
       {
-        url: '/og-global.png', //internal path to the image in the public folder
+        url: '/og-global.png',
         width: 1200,
         height: 630,
         alt: 'techsmachine - Blockchain & Smart Contracts Blog',
@@ -41,7 +68,21 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
+    title: 'techsmachine - Blockchain, Solidity & Web3 Development Blog',
+    description:
+      'Tutorials and guides on blockchain development, Solidity smart contracts, Foundry tools, and Web3.',
     images: ['/og-global.png'],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
   },
 }
 

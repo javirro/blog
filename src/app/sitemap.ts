@@ -8,7 +8,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const urls = posts.map((post) => ({
     url: `${BASE_URL}/posts/${post.slug}`,
     lastModified: new Date(post.updated || post.date),
-    changeFrequency: 'monthly' as const // Extra hint for the crawler
+    changeFrequency: 'monthly' as const,
+    priority: 0.8
   }))
 
   return [

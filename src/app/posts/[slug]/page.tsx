@@ -23,17 +23,29 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: Params) {
   const { slug } = await params
   const post = getPostBySlug(slug)
+  if (!post) return {}
   return {
-    title: post?.title,
-    description: post?.description,
-    canonical: `https://blog.techsmachine.com/posts/${slug}`,
+    title: post.title,
+    description: post.description,
+    keywords: post.tags,
+    alternates: {
+      canonical: `https://blog.techsmachine.com/posts/${slug}`,
+    },
     openGraph: {
-      modifiedTime: post?.updated,
-      title: post?.title,
-      description: post?.description,
+      type: 'article',
+      title: post.title,
+      description: post.description,
       url: `https://blog.techsmachine.com/posts/${slug}`,
-      publisedTime: post?.date
-    }
+      publishedTime: post.date,
+      modifiedTime: post.updated,
+      authors: [post.author],
+      tags: post.tags,
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: post.title,
+      description: post.description,
+    },
   }
 }
 
@@ -51,17 +63,51 @@ export default async function PostPage({ params }: Params) {
     '@type': 'TechArticle',
     headline: post.title,
     description: post.description,
+    keywords: post.tags.join(', '),
     datePublished: post.date,
     dateModified: post.updated,
     author: {
       '@type': 'Person',
       name: post.author
     },
+    publisher: {
+      '@type': 'Organization',
+      name: 'techsmachine',
+      url: 'https://blog.techsmachine.com'
+    },
     mainEntityOfPage: {
       '@type': 'WebPage',
       '@id': `https://blog.techsmachine.com/posts/${slug}`
     }
   }
+
+  // Extract FAQ items from content for FAQ structured data
+  const faqRegex = /### (.+?)\n([\s\S]*?)(?=\n###|\n## |$)/g
+  const faqSection = post.content.split('## Frequently Asked Questions')[1]?.split('\n## ')[0]
+  const faqItems: { question: string; answer: string }[] = []
+  if (faqSection) {
+    let match
+    while ((match = faqRegex.exec(faqSection)) !== null) {
+      const question = match[1].trim()
+      const answer = match[2].trim()
+      if (question && answer) {
+        faqItems.push({ question, answer })
+      }
+    }
+  }
+
+  const schemaFAQ = faqItems.length > 0 ? {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqItems.map(({ question, answer }) => ({
+      '@type': 'Question',
+      name: question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: answer
+      }
+    }))
+  } : null
 
   return (
     <article className="w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-12">
@@ -75,6 +121,7 @@ export default async function PostPage({ params }: Params) {
         Back to Blog
       </Link>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaArticle) }} />
+      {schemaFAQ && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaFAQ) }} />}
       <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black mb-2 sm:mb-3 wrap-break-words bg-linear-to-r from-indigo-500 to-purple-500 bg-clip-text text-transparent">
         {post.title}
       </h1>
