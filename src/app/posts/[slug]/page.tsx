@@ -6,6 +6,7 @@ import { SolidityBlock } from '@/ui/posts/SolidityBlock'
 import { ConsoleCommandBlock } from '@/ui/posts/ConsoleCommand'
 import { AnvilComparisonTable } from '@/ui/posts/AnvilComparisonTable'
 import { SCAvsEOATable } from '@/ui/posts/SCAvsEOATable'
+import { PostImage } from '@/ui/posts/PostImage'
 import RedirectOwnPost from '@/ui/posts/RedirectOwnPost'
 import { formatDate } from '@/lib/formatDate'
 
@@ -144,6 +145,7 @@ export default async function PostPage({ params }: Params) {
             ConsoleCommandBlock,
             AnvilComparisonTable,
             SCAvsEOATable,
+            PostImage,
             RedirectOwnPost
           }}
         />
