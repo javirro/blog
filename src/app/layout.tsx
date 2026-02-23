@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { Inter, Merriweather, Geist_Mono } from 'next/font/google'
+import { GoogleTagManager } from '@next/third-parties/google'
 import './globals.css'
 import Breadcrumb from '@/ui/Breadcrumb'
 
@@ -107,6 +108,7 @@ export default function RootLayout({
           </div>
         </footer>
       </body>
+      <GoogleTagManager gtmId="GTM-TW6SSS82" />
     </html>
   )
 }
