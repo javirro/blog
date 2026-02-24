@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { Inter, Merriweather, Geist_Mono } from 'next/font/google'
-import { GoogleTagManager, GoogleAnalytics } from '@next/third-parties/google'
+import {  GoogleAnalytics } from '@next/third-parties/google'
 import './globals.css'
 import Breadcrumb from '@/ui/Breadcrumb'
 
@@ -108,7 +108,7 @@ export default function RootLayout({
           </div>
         </footer>
       </body>
-      <GoogleTagManager gtmId="GTM-TW6SSS82" />
+      {/* <GoogleTagManager gtmId="GTM-TW6SSS82" /> */}
       <GoogleAnalytics gaId="G-7HPKK9CS2F" />
     </html>
   )
