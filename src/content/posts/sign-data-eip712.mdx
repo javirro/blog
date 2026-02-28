@@ -1,0 +1,405 @@
+---
+title: 'Sign data with EIP-712 in smart contracts |  Solidity and smart contracts guide'
+description: 'Learn all about signing data in smart contracts, how typed structured data works and how is EIP-712 used to sign data in smart contracts. Get code examples and best practices for signing data in Solidity.'
+date: '2026-02-28T09:00:00Z'
+updated: '2026-02-28T18:00:00Z'
+author: 'Javier Rodriguez'
+tags: ['smart-contract-accounts', 'solidity', 'ethereum', 'account-abstraction', 'evm', 'web3', 'smart-contracts', 'dapp-development', 'gasless-transactions', 'factory-pattern', 'wallet', "structured-data", "eip-712", "signing-data"]
+category: 'development'
+published: true
+---
+<br />
+
+*__TL;DR__: Signing data in smart contracts is a critical aspect of ensuring secure and verifiable interactions. A wallet can sign data off-chain, and the smart contract can verify the signature on-chain. 
+This is a standard practice for enabling trustless interactions and maintaining data integrity. Since EIP-712 standardizes the process of signing typed structured data, it is widely used for this purpose,
+ resolving common issues related to data integrity and security. Smart contract accounts and gasless or meta transactions are mainly based on these functionalities.*
+
+## Table of Contents
+- [Signing simple Data in Smart Contracts](#signing-simple-data-in-smart-contracts)
+  - [How does signing data in smart contracts work?](#how-does-signing-data-in-smart-contracts-work)
+- [Signing typed structured data in smart contracts with EIP-712](#signing-typed-structured-data-in-smart-contracts-with-eip-712)
+  - [Domain Separator](#domain-separator)
+  - [Types and TypeHash](#types-and-typehash)
+- [Signature verification on-chain](#signature-verification-on-chain)
+  - [Backend managed accounts for dApps](#scenarios-scas-backend-managed-accounts)
+- [Frequently Asked Questions](#frequently-asked-questions)
+- [Extra resources](#extra-resources)
+
+
+## Signed Data in Smart Contracts
+
+Signing data in smart contracts is a fundamental aspect of ensuring secure and verifiable interactions on the blockchain. It allows users to authenticate their actions and ensures that the data being processed by the smart contract
+is trustworthy. This process typically involves a user signing a message or transaction off-chain using their private key, and then the smart contract verifies the signature on-chain to confirm the authenticity of the data.
+
+Before EIP-712, signing data in smart contracts was often done using simple message signing, which could lead to issues with data integrity and security. Users signed arbitrary messages which led to bytestring data that could be misinterpreted or manipulated. 
+EIP-712 introduced a standardized way to sign typed structured data, which significantly improved the security and usability of signing data in smart contracts.
+
+### How does signing simple data in smart contracts work?
+<br />
+Before EIP-712, the process of signing simple data in smart contracts typically involved the following steps:
+1. **Data Preparation**: The user prepares the data they want to sign. This could be a transaction, a message or similar.
+2. **Off-chain Signing**: The user uses their wallet private key to cryptographically sign the prepared data off-chain.
+3. **On-chain Verification**: The signed data is then sent to the smart contract, which verifies the signature using the corresponding public key. The smart contract checks that the signature is valid and that the data has not been tampered with.
+
+Here is an example of how off-chain signing data might look using `viem` library in Typescript script (other libraries like `ethers.js` could also be used.).
+
+<SolidityBlock>
+
+```typescript
+import { createWalletClient, http, keccak256, publicActions, toBytes } from 'viem'
+import { privateKeyToAccount } from 'viem/accounts'
+import { USER_PRIVATE_KEY } from '../constants'
+import { polygon } from 'viem/chains'
+
+async function signSimpleData() {
+  const userAccount = privateKeyToAccount(USER_PRIVATE_KEY)
+
+  const walletClient = createWalletClient({
+    account: userAccount,
+    chain: polygon,
+    transport: http('https://polygon.drpc.org')
+  }).extend(publicActions)
+
+  const messageToSign = 'Approve this message to sign in to the app'
+  const signature = await walletClient.signMessage({
+    message: messageToSign
+  })
+
+  console.log('Signature:', signature)
+}
+
+```
+</SolidityBlock>
+
+The above code snippet demonstrates how a user can sign a simple message off-chain using their wallet. The signed message can then be sent to a smart contract for verification.
+However, this approach has limitations, such as the lack of structure in the signed data, which can lead to security vulnerabilities and issues with data integrity.
+
+The main use case for signing simple data in smart contracts is for authentication purposes, such as logging into a dApp or authorizing a transaction. However, due to the limitations mentioned above, it is generally recommended to use EIP-712 for signing structured data in smart contracts, as it provides a more secure and standardized approach.
+
+
+## Signing typed structured data in smart contracts with EIP-712
+<br />
+
+[EIP-712](https://eips.ethereum.org/EIPS/eip-712) is a standard for signing typed structured data in Ethereum. It allows developers to define a structured message format that can be signed off-chain and verified on-chain. This standard provides a way to ensure the integrity and authenticity of the data being processed by smart contracts. This structured format makes it more difficult for attackers to manipulate the signed data.
+
+One possible use case for signing typed structured data in smart contracts could be for <RedirectOwnPost route="/posts/smart-contract-accounts" text="Smart contract accounts" /> and gasless transactions (Meta-Transactions).
+ In this scenario, users can sign a structured message that includes the details of the transaction they want to execute,
+  and then a relayer can submit the transaction on-chain on behalf of the user, paying the gas fees. 
+  This allows for a more seamless user experience while still maintaining security and trustlessness.
+The main elements of EIP-712 include:
+- **Domain Separator**: A unique identifier for the context in which the data is being signed. It typically includes information such as the name of the dApp, the version, the chain ID, and the verifying contract address.
+- **Types**: A definition of the data structure being signed. This includes the types of each field in the data, such as `string`, `uint256`, `address`, etc.
+- **TypeHash**: The hash of the type definition, used to ensure the integrity of the data structure.
+- **Values**: The actual data that is being signed, which must conform to the defined types.
+- **Signature**: The cryptographic signature generated by the user's wallet after signing the structured data.
+
+In the following diagram, we can see how the EIP-712 signing process works:
+
+
+<PostImage src="/images/eip-712-elements.webp" alt="EIP-712 Signing Process" caption="EIP-712 Signing Process Works" />
+
+<br />
+
+In the following sections, we will explore deeply the main components of EIP-712 and how they relate to signing data in smart contracts.
+
+### Domain Separator
+
+The domain separator is a critical component of EIP-712 that provides context for the signed data. It helps to prevent replay attacks by ensuring that the signature is only valid within a specific context. The domain separator typically includes the following fields:
+- **name**: The name of the dApp or protocol.
+- **version**: The version of the dApp or protocol.
+- **chainId**: The ID of the blockchain network where the signature is valid.
+- **verifyingContract**: The address of the smart contract that will verify the signature.
+
+The domain separator is hashed and included in the data that is signed by the user's wallet. When the smart contract verifies the signature, it also checks that the domain separator matches the expected values, ensuring that the signature is valid for the intended context.
+
+The domain separator is essential for maintaining the security and integrity of signed data in smart contracts, as it helps to prevent unauthorized use of signatures across different contexts.
+It is defined off-chain to be included in the data that is signed, and it also must be defined on-chain to be used for signature verification.
+
+Off-chain, the domain separator is typically defined as follows:
+
+<SolidityBlock>
+
+```typescript
+
+  const domain = {
+    name: 'MetaTransaction',
+    version: '1',
+    chainId: 1,
+    verifyingContract: "0x1489C00f1488C79B6D8A3d4d10B443d7b4066023"
+  } as const
+
+```
+</SolidityBlock>
+
+On-chain, the domain separator could be defined from scratch or using the [EIP712 base contract from OpenZeppelin](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/utils/cryptography/EIP712.sol),
+ which provides a convenient and secured way to manage the domain separator and type hashes.
+
+This is an example of how to define the domain separator on-chain from scratch:
+
+<SolidityBlock>
+
+```solidity
+pragma solidity 0.8.33;
+
+contract DomainSeparator {
+
+    bytes32 public constant DOMAIN_TYPEHASH = keccak256(
+        "EIP712Domain(string name,string version,uint256 chainId,address verifyingContract)"
+    );
+    bytes32 public immutable DOMAIN_SEPARATOR;
+    bytes32 public immutable NAME_HASH;
+    bytes32 public immutable VERSION_HASH;
+
+    constructor() {
+        NAME_HASH    = keccak256(bytes("MyApp"));
+        VERSION_HASH = keccak256(bytes("1"));
+
+        DOMAIN_SEPARATOR = keccak256(abi.encode(
+            DOMAIN_TYPEHASH,
+            NAME_HASH,
+            VERSION_HASH,
+            block.chainid,
+            address(this)
+        ));
+    }
+}
+```
+</SolidityBlock>
+
+<br />
+
+The code snippet above demonstrates how to define the domain separator on-chain. The `DOMAIN_TYPEHASH` is a constant that represents the hash of the domain type definition, in the major part of the EIP-712 cases it would be the same.
+The `DOMAIN_SEPARATOR` is calculated in the constructor using the defined fields and is stored as an immutable variable for later use in signature verification. 
+It is a good practice to also store the name and version hashes as immutable variables, as they are used in the signature verification process and can help optimize gas usage.
+
+
+### Types and TypeHash
+<br />
+The types in EIP-712 define the structure of the data that is being signed. Each field in the data must have a defined type, such as `string`, `uint256`, `address`, etc. The type definition is used to create a hash of the data structure, known as the `TypeHash`, which is included in the signed data to ensure its integrity.
+The `TypeHash` is calculated by hashing the type definition of the data being signed. This ensures that the structure of the data is preserved and cannot be tampered with without invalidating the signature.
+ When the smart contract verifies the signature, it also checks that the `TypeHash` matches the expected value, ensuring that the data structure has not been altered.
+
+On-chain, the type definition and `TypeHash` can be defined as follows:
+
+<SolidityBlock>
+
+```solidity
+  struct Order {
+        address from;
+        address to;
+        uint256 amount;
+        uint256 expiry;
+    }
+
+  bytes32 public constant ORDER_TYPEHASH = keccak256(
+        "Order(address from,address to,uint256 amount,uint256 expiry)"
+    );
+
+  function _hashOrder(Order calldata order) internal pure returns (bytes32) {
+        return keccak256(abi.encode(
+            ORDER_TYPEHASH,
+            order.from,
+            order.to,
+            order.amount,
+            order.expiry
+        ));
+    }
+
+  function _hashTypedData(bytes32 structHash) internal view returns (bytes32) {
+        return keccak256(abi.encodePacked(
+            "\x19\x01",        // EIP-712 magic prefix
+            DOMAIN_SEPARATOR,
+            structHash
+        ));
+    }
+```
+</SolidityBlock>
+<br />
+
+In the code snippet above, the main elements are:
+- **Order struct**: This defines the structure of the data that is being signed, which includes fields for `from`, `to`, `amount`, and `expiry`.
+- **ORDER_TYPEHASH**: This is the hash of the type definition for the `Order` struct, which is calculated using the `keccak256` hash function.
+- **_hashOrder function**: This function takes an `Order` struct as input and returns the hash of the order data, which includes the `ORDER_TYPEHASH` and the values of the fields in the struct. This is known as the `structHash`.
+- **_hashTypedData function**: This function takes the `structHash` as input and returns the final hash that is signed by the user's wallet. It combines the `EIP-712 magic prefix`, the `DOMAIN_SEPARATOR`, and the `structHash` to create a unique hash for the signed data.
+
+This final hash is what the user signs off-chain, and the smart contract verifies on-chain to ensure the integrity and authenticity of the data.
+
+From the code snippet, it is also important to note the use of `abi.encode` and `abi.encodePacked` functions. The `abi.encode` function is used to encode the data in a way that preserves the structure and types, while the `abi.encodePacked` function is used to concatenate the data without padding, which is necessary for creating the final hash for signing.
+
+Furthermore, it is also important to outline the EIP-712 prefix `\x19\x01` used in the `_hashTypedData` function. This prefix is a standard part of the EIP-712 hashing process and serves to distinguish EIP-712 signed data from other types of signed messages. It helps to prevent signature collisions and ensures that the signature is only valid for EIP-712 structured data.
+
+The off-chain process of signing typed structured data using EIP-712 typically involves the following steps:
+<SolidityBlock>
+
+```typescript
+import { createWalletClient, http, publicActions } from 'viem'
+import { privateKeyToAccount } from 'viem/accounts'
+import { USER_PRIVATE_KEY } from '../constants'
+import { polygon } from 'viem/chains'
+
+async function signEIP712Data() {
+  const userAccount = privateKeyToAccount(USER_PRIVATE_KEY)
+
+  const walletClient = createWalletClient({
+    account: userAccount,
+    chain: polygon,
+    transport: http('https://polygon.drpc.org')
+  }).extend(publicActions)
+
+  const domain = {
+    name: 'MyApp',
+    version: '1',
+    chainId: polygon.id,
+    verifyingContract: '0x1489C00f1488C79B6D8A3d4d10B443d7b4066023'
+  } as const
+
+  const types = {
+    Order: [
+      { name: 'from', type: 'address' },
+      { name: 'to', type: 'address' },
+      { name: 'amount', type: 'uint256' },
+      { name: 'expiry', type: 'uint256' }
+    ]
+  } as const
+
+  const order = {
+    from: userAccount.address,
+    to: '0x1489C00f1488C79B6D8A3d4d10B443d7b4066023' as `0x${string}`,
+    amount: BigInt(1000),
+    expiry: BigInt(Math.floor(Date.now() / 1000) + 3600) // 1 hour from now
+  }
+
+  const signature = await walletClient.signTypedData({
+    domain,
+    types,
+    primaryType: 'Order',
+    message: order
+  })
+
+  console.log('Signature:', signature)
+}
+```
+</SolidityBlock>
+<br />
+
+It is important to note that the `signTypedData` function is used to sign the structured data according to the EIP-712 standard.
+The function takes the domain, types, primary type, and message as input and returns the signature generated by the user's wallet. This signature can then be sent to the smart contract for verification.
+
+The types definition in the `types` object must match the structure of the data being signed, and the `primaryType` must correspond to the main type being signed (in this case, `Order`).
+In the smart contract, the same type definition must be used to ensure that the signature can be properly verified.
+<br />
+
+## Signature verification on-chain
+<br />
+Once the user has signed the structured data off-chain, the signature can be sent to the smart contract for verification. 
+The smart contract will use the domain separator, type hash, and the values of the fields in the struct to verify that the signature is valid and that the data has not been tampered with.
+
+The on-chain verification process typically involves the following steps:
+1. **Recreate the struct hash**: The smart contract will recreate the hash of the structured data using the same type definition and values that were signed by the user.
+2. **Recreate the final hash**: The smart contract will then recreate the final hash that was signed by the user by combining the domain separator, type hash, and struct hash.
+3. **Recover the signer**: The smart contract will use the `ecrecover` function to recover the address of the signer from the signature and the final hash.
+4. **Verify the signer**: The smart contract will check that the recovered address matches the expected signer (the user's address) to confirm that the signature is valid.
+
+The verification could be implemented from scratch or using the OpenZeppelin EIP712 base contract, which provides a convenient and secure way to manage the domain separator, type hashes, and signature verification process.
+For this part of the process, using the OpenZeppelin contracts is highly recommended, as they have been thoroughly tested and audited, reducing the risk of security vulnerabilities in the signature verification process.
+
+<SolidityBlock>
+
+```solidity
+import {ECDSA} from "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
+
+event OrderVerified(address indexed signer, address indexed to, uint256 amount);
+function verify(Order calldata order, bytes calldata signature) public returns (address) {
+
+        require(block.timestamp <= order.expiry, "Order expired");
+
+        bytes32 digest = _hashTypedData(_hashOrder(order));
+
+        address signer = ECDSA.recover(digest, signature);
+
+        require(signer == order.from, "Signer is not order.from");
+
+        emit OrderVerified(signer, order.to, order.amount);
+        return signer;
+    }
+```
+</SolidityBlock>
+<br />
+
+In the code snippet above, the `verify` function takes an `Order` struct and a signature as input. It first checks that the order has not expired by comparing the current timestamp with the `expiry` field in the order.
+Then, it recreates the final hash using the `_hashTypedData` function, which combines the domain separator and the struct hash. The `ECDSA.recover` function is used to recover the address of the signer from the signature and the final hash.
+Finally, it checks that the recovered signer matches the expected signer (the `from` address in the order) to confirm that the signature is valid. If the verification is successful, an event is emitted with the details of the verified order.
+
+Using OpenZeppelin's ECDSA library is a good practice for signature verification, as it provides a secure and reliable implementation of the `ecrecover` function, which is critical for the security of the signature verification process.
+
+### Extra security considerations
+<br />
+When implementing signature verification in smart contracts, it is important to consider additional security measures to protect against potential vulnerabilities. Some of these considerations include:
+- **Replay Protection**: Implementing a mechanism to prevent replay attacks, such as using nonces or timestamps, can help ensure that a signature cannot be reused maliciously.
+- **Input Validation**: Validating the input data before processing it can help prevent issues such as overflow, underflow, or other types of data manipulation that could lead to security vulnerabilities.
+
+The following code snippet demonstrates how to implement replay protection by using a mapping to track used signatures and adding some basic input validation:
+<SolidityBlock>
+```solidity
+mapping(bytes => bool) public usedSignatures;
+event OrderVerified(address indexed signer, address indexed to, uint256 amount);
+function verify(Order calldata order, bytes calldata signature) public returns (address) {
+
+        require(block.timestamp <= order.expiry, "Order expired");
+        require(!usedSignatures[signature], "Signature already used");
+        require(signature.length == 65, "Invalid signature length");
+        require(order.from != address(0), "Invalid from address");
+
+        bytes32 digest = _hashTypedData(_hashOrder(order));
+
+        address signer = ECDSA.recover(digest, signature);
+
+        require(signer == order.from, "Signer is not order.from");
+        usedSignatures[signature] = true;
+        emit OrderVerified(signer, order.to, order.amount);
+        return signer;
+    }
+```
+</SolidityBlock>
+
+
+>[WARNING]
+>
+> The code provided in this article is intended to educate readers on the concepts and implementation of signing data in smart contracts using EIP-712.
+> It is not production-ready code and should not be used as-is in a live environment without testing and security audits.
+
+
+<br />
+# <a id="frequently-asked-questions"></a>Frequently Asked Questions
+<br />
+
+### What is signing data in smart contracts?
+Signing data in smart contracts refers to the process of using a cryptographic signature to authenticate and verify the integrity of data being sent to or processed by a smart contract. This is typically done by a user who wants to interact with a smart contract, such as executing a transaction or calling a function.
+
+### What is EIP-712?
+EIP-712 is a standard for typed structured data hashing and signing in Ethereum. It allows for more secure and efficient signing of complex data structures, enabling users to sign messages that can be verified on-chain without ambiguity.
+
+### Why is EIP-712 used?
+EIP-712 is used to provide a standardized way to sign structured data, which helps prevent replay attacks and ensures that the signed data is unambiguous. This is particularly important for smart contract interactions where the integrity and authenticity of the data are crucial.
+
+### What is the difference between `abi.encode` and `abi.encodePacked`?
+The `abi.encode` function is used to encode the data in a way that preserves the structure and types, while the `abi.encodePacked` function is used to concatenate the data without padding, which is necessary for creating the final hash for signing.
+
+### What is the EIP-712 prefix `\x19\x01`?
+The EIP-712 prefix `\x19\x01` is a standard part of the EIP-712 hashing process and serves to distinguish EIP-712 signed data from other types of signed messages. It helps to prevent signature collisions and ensures that the signature is only valid for EIP-712 structured data.
+
+### Can I use EIP-712 for gasless transactions (Meta-Transactions)?
+Yes, EIP-712 is commonly used for gasless transactions (Meta-Transactions) as it allows users to sign the transaction data off-chain, and then a relayer can submit the transaction on-chain on behalf of the user, paying the gas fees.
+
+### What happens if the Chain ID changes (e.g., a network fork)?
+The chainId is a mandatory part of the Domain Separator. If a network forks and the ID changes, the DOMAIN_SEPARATOR becomes invalid for the new chain. This is a critical security feature that prevents Cross-Chain Replay Attacks, where a signature meant for Polygon is maliciously "replayed" on Ethereum Mainnet or a fork.
+
+## <a id="extra-resources"></a>Extra resources
+<br />
+
+If you want to learn how to write, test, and deploy smart contracts in Solidity, you can check the posts related to the most popular Solidity development tool, Foundry:
+
+- <RedirectOwnPost route="/posts/forge-foundry" text="Foundry Forge tutorial for smart contract development" />
+- <RedirectOwnPost route="/posts/cast-foundry" text="Foundry Cast tutorial for smart contract interaction" />
+- <RedirectOwnPost route="/posts/anvil-foundry" text="Anvil Foundry tutorial for local blockchain development" />
+
