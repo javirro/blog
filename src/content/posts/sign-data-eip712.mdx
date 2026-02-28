@@ -21,12 +21,12 @@ This is a standard practice for enabling trustless interactions and maintaining 
   - [Domain Separator](#domain-separator)
   - [Types and TypeHash](#types-and-typehash)
 - [Signature verification on-chain](#signature-verification-on-chain)
-  - [Backend managed accounts for dApps](#scenarios-scas-backend-managed-accounts)
+  - [Extra security considerations](#extra-security-considerations)
 - [Frequently Asked Questions](#frequently-asked-questions)
 - [Extra resources](#extra-resources)
 
 
-## Signed Data in Smart Contracts
+## <a id="signing-simple-data-in-smart-contracts"></a>Signed Data in Smart Contracts
 
 Signing data in smart contracts is a fundamental aspect of ensuring secure and verifiable interactions on the blockchain. It allows users to authenticate their actions and ensures that the data being processed by the smart contract
 is trustworthy. This process typically involves a user signing a message or transaction off-chain using their private key, and then the smart contract verifies the signature on-chain to confirm the authenticity of the data.
@@ -34,7 +34,7 @@ is trustworthy. This process typically involves a user signing a message or tran
 Before EIP-712, signing data in smart contracts was often done using simple message signing, which could lead to issues with data integrity and security. Users signed arbitrary messages which led to bytestring data that could be misinterpreted or manipulated. 
 EIP-712 introduced a standardized way to sign typed structured data, which significantly improved the security and usability of signing data in smart contracts.
 
-### How does signing simple data in smart contracts work?
+### <a id="how-does-signing-data-in-smart-contracts-work"></a>How does signing simple data in smart contracts work?
 <br />
 Before EIP-712, the process of signing simple data in smart contracts typically involved the following steps:
 1. **Data Preparation**: The user prepares the data they want to sign. This could be a transaction, a message or similar.
@@ -77,7 +77,7 @@ However, this approach has limitations, such as the lack of structure in the sig
 The main use case for signing simple data in smart contracts is for authentication purposes, such as logging into a dApp or authorizing a transaction. However, due to the limitations mentioned above, it is generally recommended to use EIP-712 for signing structured data in smart contracts, as it provides a more secure and standardized approach.
 
 
-## Signing typed structured data in smart contracts with EIP-712
+## <a id="signing-typed-structured-data-in-smart-contracts-with-eip-712"></a>Signing typed structured data in smart contracts with EIP-712
 <br />
 
 [EIP-712](https://eips.ethereum.org/EIPS/eip-712) is a standard for signing typed structured data in Ethereum. It allows developers to define a structured message format that can be signed off-chain and verified on-chain. This standard provides a way to ensure the integrity and authenticity of the data being processed by smart contracts. This structured format makes it more difficult for attackers to manipulate the signed data.
@@ -102,7 +102,7 @@ In the following diagram, we can see how the EIP-712 signing process works:
 
 In the following sections, we will explore deeply the main components of EIP-712 and how they relate to signing data in smart contracts.
 
-### Domain Separator
+### <a id="domain-separator"></a>Domain Separator
 
 The domain separator is a critical component of EIP-712 that provides context for the signed data. It helps to prevent replay attacks by ensuring that the signature is only valid within a specific context. The domain separator typically includes the following fields:
 - **name**: The name of the dApp or protocol.
@@ -173,7 +173,7 @@ The `DOMAIN_SEPARATOR` is calculated in the constructor using the defined fields
 It is a good practice to also store the name and version hashes as immutable variables, as they are used in the signature verification process and can help optimize gas usage.
 
 
-### Types and TypeHash
+### <a id="types-and-typehash"></a>Types and TypeHash
 <br />
 The types in EIP-712 define the structure of the data that is being signed. Each field in the data must have a defined type, such as `string`, `uint256`, `address`, etc. The type definition is used to create a hash of the data structure, known as the `TypeHash`, which is included in the signed data to ensure its integrity.
 The `TypeHash` is calculated by hashing the type definition of the data being signed. This ensures that the structure of the data is preserved and cannot be tampered with without invalidating the signature.
@@ -289,7 +289,7 @@ The types definition in the `types` object must match the structure of the data 
 In the smart contract, the same type definition must be used to ensure that the signature can be properly verified.
 <br />
 
-## Signature verification on-chain
+## <a id="signature-verification-on-chain"></a>Signature verification on-chain
 <br />
 Once the user has signed the structured data off-chain, the signature can be sent to the smart contract for verification. 
 The smart contract will use the domain separator, type hash, and the values of the fields in the struct to verify that the signature is valid and that the data has not been tampered with.
