@@ -2,7 +2,7 @@
 title: 'Foundry Forge Tutorial: How to Compile, Test, and Deploy Solidity Smart Contracts'
 description: 'Complete Forge guide: compile Solidity with optimization, run unit tests with fuzzing, deploy scripts, and format code. Includes foundry.toml profiles and coverage.'
 date: '2026-02-07T09:00:00Z'
-updated: '2026-02-21T09:00:00Z'
+updated: '2026-03-06T21:00:00Z'
 author: 'Javier Rodriguez'
 tags: ['foundry', 'forge', 'solidity', 'smart-contracts', 'ethereum', 'evm', 'solidity-testing', 'forge-build', 'forge-test', 'smart-contract-deployment', 'web3', 'blockchain-development']
 category: 'tooling'
@@ -27,7 +27,7 @@ Forge is designed to streamline the entire smart contract development lifecycle 
 - [Extra resources](#extra-resources)
 
 <br />
-Foundry is a key tool to work with smart contracts in Solidity and EVM networks. Foundry provides a set of tools to facilitate the development, testing,
+Foundry is a key tool for working with smart contracts in Solidity and EVM networks. Foundry provides a set of tools to facilitate the development, testing,
 and deployment of smart contracts. One of these tools is **Forge**.
 
 Forge is the core tool of Foundry for Solidity smart contract development and testing. It provides a powerful and flexible environment for writing, compiling, testing, and deploying smart contracts.
@@ -173,7 +173,7 @@ Another useful flag is `--vvvv`, which allows you to increase the verbosity of t
  As you increase the verbosity level, you will see more detailed information about the test execution, including the values of variables, the execution flow, and any errors that occur.
 The max level of verbosity is 5.
 
-When you are working with test, it is very important to know the part of your code you are covering with your tests. You can use the following command which generates a coverage report that shows which lines of code are covered by your tests and which are not.
+When you are working with tests, it is very important to know the part of your code you are covering with your tests. You can use the following command which generates a coverage report that shows which lines of code are covered by your tests and which are not.
 
 <ConsoleCommandBlock>
  forge coverage
@@ -185,7 +185,7 @@ When you are working with test, it is very important to know the part of your co
 
 Forge also allows you to write and execute scripts to automate various tasks related to smart contract development and deployment. This can be very useful for tasks such as deploying contracts, interacting with deployed contracts, or performing complex operations that require multiple steps.
 
-To simulate  a script execution , you can use the following command:
+To simulate a script execution, you can use the following command:
 <ConsoleCommandBlock>
  forge script [script_path]
 </ConsoleCommandBlock>
@@ -216,6 +216,12 @@ If you want to see the available options, you can check the official documentati
 ### How do I configure different Solidity versions?
 You can specify a single version or a range in the `foundry.toml` file under the `solc_version` parameter. Forge automatically detects and downloads the correct compiler.
 
+### How do I enable optimization for my contracts?
+You can enable optimization in the `foundry.toml` file by setting `optimizer = true` and configuring `optimizer_runs` for the desired level of optimization.
+
+### What is the purpose of the `--via-ir` flag?
+The `--via-ir` flag enables the use of the intermediate representation (IR) in the Solidity compiler, which can lead to more efficient bytecode and better optimization results.
+
 ### What is the purpose of the `--force` flag?
 By default, Forge only recompiles modified files. The `--force` flag bypasses the cache and forces a full recompilation of all smart contracts in the project.
 
@@ -234,6 +240,6 @@ The recommended way is using `forge script` with the `--broadcast` flag. This al
 If you want to learn more about Forge and all the scenarios it supports, you can check the official documentation at
 [Forge official docs](https://getfoundry.sh/forge/overview)
 
-Furthermore, if you want to learn more about another Foundry tools, you can check the <RedirectOwnPost route="/posts/cast-foundry" text="Foundry Cast tutorial for smart contract interaction" />,
+Furthermore, if you want to learn more about other Foundry tools, you can check the <RedirectOwnPost route="/posts/cast-foundry" text="Foundry Cast tutorial for smart contract interaction" />,
 where we explain how to use Cast, the command-line tool from Foundry to interact with Ethereum nodes and smart contracts or if you are interested in the local Ethereum node from Foundry, you can check the
 <RedirectOwnPost route="/posts/anvil-foundry" text="Foundry Anvil tutorial for local Ethereum node" />, where we explain how to use Anvil, the local Ethereum node from Foundry for testing and development.

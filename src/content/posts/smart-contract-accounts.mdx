@@ -2,7 +2,7 @@
 title: 'Smart Contract Accounts | EVM Solidity Guide & Code Examples'
 description: 'Learn how smart contract accounts work on EVM chains and build your own Ethereum smart contract account with secure Solidity code and real-world use cases.'
 date: '2026-02-21T09:00:00Z'
-updated: '2026-02-21T18:00:00Z'
+updated: '2026-03-06T21:00:00Z'
 author: 'Javier Rodriguez'
 tags: ['smart-contract-accounts', 'solidity', 'ethereum', 'account-abstraction', 'evm', 'web3', 'smart-contracts', 'dapp-development', 'gasless-transactions', 'factory-pattern', 'wallet']
 category: 'development'
@@ -156,7 +156,7 @@ Furthermore, there is an `emergencyWithdraw` function that allows the owner to w
 ### <a id="execute-function"></a>Execute function
 <br />
 The `execute` function is a critical component of the smart contract account, as it allows the owner to perform actions on the blockchain. It takes three parameters: the destination address (`to`), the value of Ether to be sent (`value`), and the data to be sent with the call (`data`).
-The smart contract account resend the transaction with the same parameters that the owner sent to the `execute` function, but it is the smart contract account which is sending the transaction to the destination address. This means that the smart contract account is the one that is interacting with other contracts or transferring Ether, while the owner is just authorizing these actions by calling the `execute` function.
+The smart contract account resends the transaction with the same parameters that the owner sent to the `execute` function, but it is the smart contract account which is sending the transaction to the destination address. This means that the smart contract account is the one that is interacting with other contracts or transferring Ether, while the owner is just authorizing these actions by calling the `execute` function.
 This design allows for a clear separation of concerns, where the owner is responsible for authorizing actions, while the smart contract account is responsible for executing them. It also enables the implementation of additional logic and security measures within the `execute` function, such as access control, transaction limits, or custom event logging.
 
 In the destination smart contract, the `msg.sender` will be the address of the smart contract account, not the owner. This is an important aspect to consider when designing the logic of the destination contract, as it may need to implement specific functionality to recognize and interact with the smart contract account.
@@ -271,6 +271,11 @@ The `SmartContractAccount` built in this guide is a direct precursor to an ERC-4
 - Integration with the singleton `EntryPoint` contract deployed on Ethereum.
 - Optional **paymaster** support, allowing a third party to sponsor gas fees on behalf of users.
 
+Account abstraction introduces smart contract wallets that need to verify user signatures in custom ways — but that raises a question: what exactly is the user signing?
+EIP-712 answers it by providing a standard for structuring and displaying signed data in a human-readable format, so instead of blindly signing a cryptic hex string, users see clearly labeled fields like "recipient" or "amount."
+In the context of account abstraction, this means the smart wallet's validation logic has a consistent, tamper-proof format to verify against,
+while users stay informed about what they're authorizing — making the combination essential for both security and usability. If you want to learn more about EIP-712 and how to implement it in your smart contracts, check the <RedirectOwnPost route="/posts/sign-data-eip712" text="EIP-712 signing data guide" /> where we explain everything you need to know about this standard and how to use it in Solidity.
+
 In a future post, we will extend the `SmartContractAccount` shown here into a full ERC-4337 implementation. If you want to start preparing now, the <RedirectOwnPost route="/posts/forge-foundry" text="Foundry Forge guide" /> covers everything you need to write and test this kind of contract, and the <RedirectOwnPost route="/posts/anvil-foundry" text="Anvil local node guide" /> shows how to run a local EVM environment to iterate quickly.
 
 
@@ -301,7 +306,7 @@ Yes. Because a smart contract account can execute arbitrary calls via its `execu
 ## <a id="extra-resources"></a>Extra resources
 <br />
 
-If you want to learn how to write, test and deploy the smart contracts in solidity, you can check the posts related with the most popular solidity development tool, Foundry:
+If you want to learn how to write, test, and deploy smart contracts in Solidity, you can check the posts related to the most popular Solidity development tool, Foundry:
 
 - <RedirectOwnPost route="/posts/forge-foundry" text="Foundry Forge tutorial for smart contract development" />
 - <RedirectOwnPost route="/posts/cast-foundry" text="Foundry Cast tutorial for smart contract interaction" />

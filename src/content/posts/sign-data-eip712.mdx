@@ -1,13 +1,15 @@
 ---
-title: 'Sign data with EIP-712 in smart contracts |  Solidity and smart contracts guide'
-description: 'Learn all about signing data in smart contracts, how typed structured data works and how is EIP-712 used to sign data in smart contracts. Get code examples and best practices for signing data in Solidity.'
+title: 'Sign Data with EIP-712 in Solidity: A Complete Guide (2026)'
+description: 'Learn all about signing data in smart contracts, how typed structured data works, and how EIP-712 is used to sign data in smart contracts. Get code examples and best practices for signing data in Solidity.'
 date: '2026-02-28T09:00:00Z'
-updated: '2026-02-28T18:00:00Z'
+updated: '2026-03-06T21:00:00Z'
 author: 'Javier Rodriguez'
 tags: ['smart-contract-accounts', 'solidity', 'ethereum', 'account-abstraction', 'evm', 'web3', 'smart-contracts', 'dapp-development', 'gasless-transactions', 'factory-pattern', 'wallet', "structured-data", "eip-712", "signing-data"]
 category: 'development'
 published: true
 ---
+
+
 <br />
 
 *__TL;DR__: Signing data in smart contracts is a critical aspect of ensuring secure and verifiable interactions. A wallet can sign data off-chain, and the smart contract can verify the signature on-chain. 
@@ -96,7 +98,7 @@ The main elements of EIP-712 include:
 In the following diagram, we can see how the EIP-712 signing process works:
 
 
-<PostImage src="/images/eip-712-elements.webp" alt="EIP-712 Signing Process" caption="EIP-712 Signing Process Works" />
+<PostImage src="/images/eip-712-elements.webp" alt="EIP-712 hashing architecture: Domain Separator, TypeHash, and StructHash" caption="EIP-712 Signing Process Works" />
 
 <br />
 
@@ -370,14 +372,14 @@ function verify(Order calldata order, bytes calldata signature) public returns (
 
 
 <br />
-# <a id="frequently-asked-questions"></a>Frequently Asked Questions
+## <a id="frequently-asked-questions"></a>Frequently Asked Questions
 <br />
 
 ### What is signing data in smart contracts?
 Signing data in smart contracts refers to the process of using a cryptographic signature to authenticate and verify the integrity of data being sent to or processed by a smart contract. This is typically done by a user who wants to interact with a smart contract, such as executing a transaction or calling a function.
 
 ### What is EIP-712?
-EIP-712 is a standard for typed structured data hashing and signing in Ethereum. It allows for more secure and efficient signing of complex data structures, enabling users to sign messages that can be verified on-chain without ambiguity.
+EIP-712 is an Ethereum standard for signing typed, structured data instead of just hex strings. It makes signatures human-readable in wallets like MetaMask and prevents replay attacks using a Domain Separator.
 
 ### Why is EIP-712 used?
 EIP-712 is used to provide a standardized way to sign structured data, which helps prevent replay attacks and ensures that the signed data is unambiguous. This is particularly important for smart contract interactions where the integrity and authenticity of the data are crucial.

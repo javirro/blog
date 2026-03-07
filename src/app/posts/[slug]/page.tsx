@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { getAllPosts, getPostBySlug } from '@/lib/posts'
+import { BASE_URL } from '@/constants'
 import { MDXRemote } from 'next-mdx-remote/rsc'
 import { SolidityBlock } from '@/ui/posts/SolidityBlock'
 import { ConsoleCommandBlock } from '@/ui/posts/ConsoleCommand'
@@ -15,7 +16,7 @@ interface Params {
     slug: string
   }>
 }
-// Applying Static site generation (SSG) for blog postst because their content doesn't change often
+// Applying Static site generation (SSG) for blog posts because their content doesn't change often
 export async function generateStaticParams() {
   const posts = getAllPosts()
   return posts.map((post) => ({
@@ -31,17 +32,18 @@ export async function generateMetadata({ params }: Params) {
     description: post.description,
     keywords: post.tags,
     alternates: {
-      canonical: `https://blog.techsmachine.com/posts/${slug}`,
+      canonical: `${BASE_URL}/posts/${slug}`,
     },
     openGraph: {
       type: 'article',
       title: post.title,
       description: post.description,
-      url: `https://blog.techsmachine.com/posts/${slug}`,
+      url: `${BASE_URL}/posts/${slug}`,
       publishedTime: post.date,
-      modifiedTime: post.updated,
+      modifiedTime: post.updated || post.date,
       authors: [post.author],
       tags: post.tags,
+      section: post.category,
     },
     twitter: {
       card: 'summary_large_image',
@@ -67,7 +69,7 @@ export default async function PostPage({ params }: Params) {
     description: post.description,
     keywords: post.tags.join(', '),
     datePublished: post.date,
-    dateModified: post.updated,
+    dateModified: post.updated || post.date,
     author: {
       '@type': 'Person',
       name: post.author
@@ -75,11 +77,11 @@ export default async function PostPage({ params }: Params) {
     publisher: {
       '@type': 'Organization',
       name: 'techsmachine',
-      url: 'https://blog.techsmachine.com'
+      url: BASE_URL
     },
     mainEntityOfPage: {
       '@type': 'WebPage',
-      '@id': `https://blog.techsmachine.com/posts/${slug}`
+      '@id': `${BASE_URL}/posts/${slug}`
     }
   }
 

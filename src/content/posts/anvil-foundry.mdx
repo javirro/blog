@@ -2,7 +2,7 @@
 title: 'Foundry Anvil Tutorial: How to Run a Local Ethereum Node for Smart Contract Testing'
 description: 'Set up Anvil, Foundry local Ethereum node, with pre-funded accounts and mainnet forking. Learn configuration, network simulation, and fast smart contract debugging.'
 date: '2026-02-07T09:00:00Z'
-updated: '2026-02-21T09:00:00Z'
+updated: '2026-03-06T21:00:00Z'
 author: 'Javier Rodriguez'
 tags: ['foundry', 'anvil', 'local-blockchain', 'smart-contracts', 'ethereum', 'evm', 'mainnet-fork', 'solidity-testing', 'web3', 'blockchain-development']
 category: 'tooling'
@@ -17,12 +17,13 @@ supports Mainnet forking to simulate real-world environments, and offers instant
 - [Anvil examples](#anvil-examples)
   - [Basic initialization](#basic-initialization)
   - [Forking real networks](#forking-real-networks)
+  - [Forking multiple networks](#forking-multiple-networks)
 - [Similar alternatives to Anvil](#similar-alternatives-to-anvil)
 - [Frequently Asked Questions](#frequently-asked-questions)
 - [Extra resources](#extra-resources)
 
 <br />
-Foundry is a key tool to work with smart contracts in Solidity and EVM networks. Foundry provides a set of tools to facilitate the development, testing,
+Foundry is a key tool for working with smart contracts in Solidity and EVM networks. Foundry provides a set of tools to facilitate the development, testing,
 and deployment of smart contracts. One of these tools is **Anvil**.
 
 Anvil is a local Ethereum node that runs on your machine. It is designed to be fast and lightweight. It allows developers to test and debug their smart contracts
@@ -38,7 +39,7 @@ In this section, we will see some practical examples of how to use Anvil in diff
 
 *If you want to copy the commands, just click on the command box and it will be copied to your clipboard.*
 
-<br /><br />
+<br />
 
 ### <a id="basic-initialization"></a>Basic initialization
 
@@ -55,10 +56,13 @@ The chainId will be **31337** by default. Specifically, here are the main defaul
 **Default Configuration:**
 - RPC endpoint: http://127.0.0.1:8545
 - ChainId: 31337
-- Accounts created: 10 pre-funded accounts
+- Accounts created: 10 pre-funded accounts (all of them corresponding to the same mnemonic)
 - Initial balance per account: 10,000 ETH
 - Block time: Instant mining (0 seconds)
 - Gas limit: 30,000,000
+- Base fee: 1 gwei
+- Genesis block timestamp: Current time
+- Genesis block number: 0
 
 These defaults are ideal for rapid development and testing without waiting for block confirmations. You can use this network to deploy and test your smart contracts locally, to connect your dApps, or to run scripts that interact with the blockchain. 
 
@@ -69,8 +73,13 @@ One of the most common use cases of Anvil is to fork real blockchain networks. T
 In the following example, we will fork the Ethereum Mainnet using an RPC URL from a public provider. You can replace the URL with your own provider if you have one.
 
 <ConsoleCommandBlock>
-  anvil --fork-url https://ethereum.reth.rs/rpc
+  anvil --fork-url https://eth.blockrazor.xyz
 </ConsoleCommandBlock>
+
+In the following image, there is an example of the output you will get when you run this command. You can see that Anvil is forking the Ethereum Mainnet
+ and it is creating a local node with the same state as the Mainnet at the moment of forking.
+
+ <PostImage src="/images/anvilNetwork.webp" alt="Anvil forking Ethereum Mainnet" caption="Anvil forking Ethereum Mainnet" />
 
 This strategy is very useful for testing smart contracts in a realistic environment, as you can interact with real contracts and data without risking real funds.
 One of the most common use cases is to test DeFi protocols, as you can simulate trades, liquidity provision, and other interactions with real assets.
@@ -80,6 +89,17 @@ In general, you can test any smart contract which has been already deployed on t
 Anvil offers additional options for forking, such as specifying a block number to fork from, configuring some network parameters for the new RPC endpoint which you are creating like CORS, request limits, response headers and much more.
 All these options are essential to customize the behavior of your local node and to adapt it to your specific needs. You can totally simulate the behavior of a real network with Anvil.
 
+### <a id="forking-multiple-networks"></a>Forking multiple networks
+<br />
+Anvil also allows you to fork multiple networks at the same time. This is useful if you want to test interactions between different networks, such as cross-chain bridges or multi-chain dApps.
+To fork multiple networks,you can open several terminal windows and run the Anvil command with different RPC URLs in each one. However, by default, when you would open the second Anvil instance, it would try to bind to the same port (8545) and it would fail.
+To avoid this, you can specify a different port for each instance using the `--port` option.
+
+<ConsoleCommandBlock>
+  anvil --fork-url https://eth.blockrazor.xyz --port 8546
+</ConsoleCommandBlock>
+
+This is the perfect strategy to create a multi-chain testing environment where you can simulate how a Dapp works in several chains at the same time. 
 
 ## <a id="similar-alternatives-to-anvil"></a>Similar alternatives to Anvil
 <br />
@@ -101,6 +121,9 @@ Anvil is a local Ethereum node from the Foundry toolkit used for testing and deb
 ### What port does Anvil run on by default?
 Anvil runs on http://127.0.0.1:8545 by default with chainId 31337.
 
+### How can I change the Anvil default port?
+You can change the default port by using the `--port` option when starting Anvil, for example: `anvil --port 8546`.
+
 ### How do I fork Ethereum mainnet with Anvil?
 Use the command `anvil --fork-url https://ethereum.reth.rs/rpc` to create a local copy of mainnet state.
 
@@ -111,10 +134,11 @@ Yes, Anvil can fork any EVM-compatible network including Ethereum mainnet, Sepol
 Anvil creates 10 test accounts, each pre-funded with 10,000 ETH for testing purposes.
 
 
+
 ## <a id="extra-resources"></a>Extra resources
 <br />
 If you want to learn more about Anvil and all the scenarios it supports, you can check the official documentation at
 [Anvil official docs](https://getfoundry.sh/anvil/reference/anvil)
 
-Furthermore, if you want to learn more about another Foundry tools, you can check the <RedirectOwnPost route="/posts/cast-foundry" text="Foundry Cast tutorial for smart contract interaction" />,
-where we explain how to use Cast, the command-line tool from Foundry to interact with Ethereum nodes and smart contracts.
+Furthermore, if you want to learn more about other Foundry tools, you can check the <RedirectOwnPost route="/posts/cast-foundry" text="Foundry Cast tutorial for smart contract interaction" />,
+where we explain how to use Cast, the command-line tool from Foundry to interact with Ethereum nodes and smart contracts or if you want to learn how to use Forge, the compiling and testing framework from Foundry, you can check the <RedirectOwnPost route="/posts/forge-foundry" text="Foundry Forge tutorial for smart contract testing" />.
